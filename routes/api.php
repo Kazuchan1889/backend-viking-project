@@ -8,12 +8,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 >>>>>>> 97c8637 (admin)
 use App\Http\Controllers\NewsController;
-<<<<<<< HEAD
-=======
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
->>>>>>> 00b2d4d (login / regis)
-=======
->>>>>>> 71945b4 (commit)
 
 Route::get('news', [NewsController::class, 'index']);
 Route::get('news/{id}', [NewsController::class, 'show']);
