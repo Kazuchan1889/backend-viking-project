@@ -34,6 +34,7 @@ class AuthenticatedSessionController extends Controller
             return response()->json([
                 'user' => $user,
                 'token' => $token,
+                'is_admin' => $user->is_admin,
             ], Response::HTTP_OK); // 200 OK
 
         } catch (\Illuminate\Validation\ValidationException $e) {
