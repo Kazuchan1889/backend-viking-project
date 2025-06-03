@@ -10,6 +10,6 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 
-Route::middleware('auth:sanctum')->post('/logout', [AuthenticatedSessionController::class, 'destroy']);
+Route::middleware('auth:sanctum')->get('/logout', [AuthenticatedSessionController::class, 'destroy']);
 
 require __DIR__.'/auth.php';
