@@ -26,8 +26,7 @@ class RegisteredUserController extends Controller
                             ->mixedCase()
                             ->letters()
                             ->numbers()
-                            ->symbols()
-                            ->uncompromised(),
+                            ->symbols(),
                         'max:12',],
                 'PIN' => ['required', 'digits:6'],
             ]);
@@ -38,6 +37,8 @@ class RegisteredUserController extends Controller
                 'password' => Hash::make($validated['password']),
                 'PIN' => Hash::make($validated['PIN']),
             ]);
+
+            $user->assignRole('user'); // Assign default role
 
             event(new Registered($user));
 
