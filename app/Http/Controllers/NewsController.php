@@ -30,19 +30,13 @@ class NewsController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image' => 'required|image|max:2048', // validasi file gambar max 2MB
+            'image' => 'required|string', // Ini adalah nama file image
         ]);
-
-        // Simpan file gambar ke folder public storage
-        $imagePath = $request->file('image')->store('news_images', 'public');
-
-        // Buat URL gambar lengkap
-        $imageUrl = asset('storage/' . $imagePath);
 
         $news = News::create([
             'title' => $request->title,
             'description' => $request->description,
-            'image' => $imageUrl,  // simpan URL gambar di DB
+            'image' => $request->image, // Simpan nama file image
         ]);
 
         return response()->json($news, 201);
