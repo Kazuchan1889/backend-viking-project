@@ -15,13 +15,15 @@ class PasswordResetLinkController extends Controller
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'email' => ['required', 'email'],
-            'pin' => ['required', 'string', 'size:6'], // Misalnya 6 digit
+            'username' => ['required', 'string', 'exists:users,username'],
+            'email' => ['required', 'email', 'exists:users,email'],
+            'pin' => ['required', 'string', 'size:6'],
         ]);
+
 
         $user = User::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->pin, $user->pin)) {
+        if (!$user || !Hash::check($request->pin, $user->PIN)) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials do not match our records.'],
             ]);
