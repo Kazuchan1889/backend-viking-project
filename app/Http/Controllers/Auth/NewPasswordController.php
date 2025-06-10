@@ -22,8 +22,8 @@ class NewPasswordController extends Controller
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'token' => ['required'],
             'email' => ['required', 'email'],
+            'pin' => ['required'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -39,7 +39,7 @@ class NewPasswordController extends Controller
         }
 
         $user->password = Hash::make($request->password);
-        $user->setRemeberToken(Str::random(60));
+        $user->setRememberToken(Str::random(60));
         $user->save();
 
         event(new \Illuminate\Auth\Events\PasswordReset($user));
