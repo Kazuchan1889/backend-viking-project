@@ -20,8 +20,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         return $request->user();
     });
 
-    Route::get('/logout', [AuthenticatedSessionController::class, 'destroy']);
-
 Route::middleware('auth:sanctum')->get('/logout', [AuthenticatedSessionController::class, 'destroy']);
 
 Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
