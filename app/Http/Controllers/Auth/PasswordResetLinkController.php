@@ -21,7 +21,9 @@ class PasswordResetLinkController extends Controller
         ]);
 
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)
+        ->where('username', $request->username)
+        ->first();
 
         if (!$user || !Hash::check($request->pin, $user->PIN)) {
             throw ValidationException::withMessages([
@@ -29,16 +31,20 @@ class PasswordResetLinkController extends Controller
             ]);
         }
 
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
-
-        if ($status === Password::RESET_LINK_SENT) {
-            return response()->json(['status' => __($status)]);
-        }
-
-        throw ValidationException::withMessages([
-            'email' => [__($status)],
+        return response()->json([
+            'status' => $user->only('id', 'username', 'email')
         ]);
+
+        // $status = Password::sendResetLink(
+        //     $request->only('email')
+        // );
+
+        // if ($status === Password::RESET_LINK_SENT) {
+        //     return response()->json(['status' => __($status)]);
+        // }
+
+        // throw ValidationException::withMessages([
+        //     'email' => [__($status)],
+        // ]);
     }
 }
