@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ServerRules extends Model
 {
     use HasFactory;
-
+ 
     protected $fillable = [
         'game_info_id',
         'title',
