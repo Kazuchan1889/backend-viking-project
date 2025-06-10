@@ -6,10 +6,18 @@ use App\Http\Controllers\Api\DonationController;
 use App\Http\Controllers\Api\ServerRulesController;
 use App\Http\Controllers\Api\Donation\RetailDonationController;
 use App\Http\Controllers\Api\Donation\ServiceDonationController;
-use App\Http\Controllers\Api\Donation\SeassonPassDonationController;
+use App\Http\Controllers\Api\Donation\SeasonPassDonationController; // Corrected typo: SeassonPass to SeasonPass
 use App\Http\Controllers\Api\Donation\PackageDonationController;
 use App\Http\Controllers\Api\Donation\HowToDonationController;
-use App\Http\Controllers\GameInfo\ServerInfo\GeneralInfo\GeneralInformationController;
+// Note: GeneralInformationController was in previous 'HEAD' but not used in a route here.
+// If it's for game-info, GameInfoSectionController handles it.
+// If it's a separate endpoint, you'd need to define its route.
+// For now, it's not strictly needed for the routes provided in the conflict.
+// use App\Http\Controllers\GameInfo\ServerInfo\GeneralInfo\GeneralInformationController;
+
+// From the other branch's changes
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+
 
 // =======================
 // Game Info Group
@@ -23,6 +31,9 @@ Route::prefix('game-info')->name('game-info.')->group(function () {
 });
 
 
+// =======================
+// Server Rules Group
+// =======================
 Route::prefix('server')->name('server.')->group(function () {
     Route::get('/', [ServerRulesController::class, 'index'])->name('index');
     Route::post('/', [ServerRulesController::class, 'store'])->name('store');
@@ -63,11 +74,12 @@ Route::prefix('service-donations')->name('service-donations.')->group(function (
 });
 
 Route::prefix('seasonpass-donations')->name('seasonpass-donations.')->group(function () {
-    Route::get('/', [SeassonPassDonationController::class, 'index'])->name('index');
-    Route::post('/', [SeassonPassDonationController::class, 'store'])->name('store');
-    Route::get('/{id}', [SeassonPassDonationController::class, 'show'])->name('show');
-    Route::put('/{id}', [SeassonPassDonationController::class, 'update'])->name('update');
-    Route::delete('/{id}', [SeassonPassDonationController::class, 'destroy'])->name('destroy');
+    // Corrected controller name
+    Route::get('/', [SeasonPassDonationController::class, 'index'])->name('index');
+    Route::post('/', [SeasonPassDonationController::class, 'store'])->name('store');
+    Route::get('/{id}', [SeasonPassDonationController::class, 'show'])->name('show');
+    Route::put('/{id}', [SeasonPassDonationController::class, 'update'])->name('update');
+    Route::delete('/{id}', [SeasonPassDonationController::class, 'destroy'])->name('destroy');
 });
 
 Route::prefix('package-donations')->name('package-donations.')->group(function () {
@@ -85,3 +97,13 @@ Route::prefix('howto-donations')->name('howto-donations.')->group(function () {
     Route::put('/{id}', [HowToDonationController::class, 'update'])->name('update');
     Route::delete('/{id}', [HowToDonationController::class, 'destroy'])->name('destroy');
 });
+
+// =======================
+// Authentication Routes (from the other branch)
+// =======================
+Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+
+Route::middleware('auth:sanctum')->get('/logout', [AuthenticatedSessionController::class, 'destroy']);
+
+// This line typically pulls in additional authentication-related routes (e.g., for registration, password reset)
+require __DIR__.'/auth.php';
