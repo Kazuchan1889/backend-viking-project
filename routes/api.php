@@ -6,13 +6,9 @@ use App\Http\Controllers\Api\DonationController;
 use App\Http\Controllers\Api\ServerRulesController;
 use App\Http\Controllers\Api\Donation\RetailDonationController;
 use App\Http\Controllers\Api\Donation\ServiceDonationController;
-use App\Http\Controllers\Api\Donation\SeasonPassDonationController; // Corrected typo: SeassonPass to SeasonPass
+use App\Http\Controllers\Api\Donation\SeassonPassDonationController; // Corrected typo: SeassonPass to SeasonPass
 use App\Http\Controllers\Api\Donation\PackageDonationController;
 use App\Http\Controllers\Api\Donation\HowToDonationController;
-// Note: GeneralInformationController was in previous 'HEAD' but not used in a route here.
-// If it's for game-info, GameInfoSectionController handles it.
-// If it's a separate endpoint, you'd need to define its route.
-// For now, it's not strictly needed for the routes provided in the conflict.
 // use App\Http\Controllers\GameInfo\ServerInfo\GeneralInfo\GeneralInformationController;
 
 // From the other branch's changes
@@ -75,11 +71,11 @@ Route::prefix('service-donations')->name('service-donations.')->group(function (
 
 Route::prefix('seasonpass-donations')->name('seasonpass-donations.')->group(function () {
     // Corrected controller name
-    Route::get('/', [SeasonPassDonationController::class, 'index'])->name('index');
-    Route::post('/', [SeasonPassDonationController::class, 'store'])->name('store');
-    Route::get('/{id}', [SeasonPassDonationController::class, 'show'])->name('show');
-    Route::put('/{id}', [SeasonPassDonationController::class, 'update'])->name('update');
-    Route::delete('/{id}', [SeasonPassDonationController::class, 'destroy'])->name('destroy');
+    Route::get('/', [SeassonPassDonationController::class, 'index'])->name('index');
+    Route::post('/', [SeassonPassDonationController::class, 'store'])->name('store');
+    Route::get('/{id}', [SeassonPassDonationController::class, 'show'])->name('show');
+    Route::put('/{id}', [SeassonPassDonationController::class, 'update'])->name('update');
+    Route::delete('/{id}', [SeassonPassDonationController::class, 'destroy'])->name('destroy');
 });
 
 Route::prefix('package-donations')->name('package-donations.')->group(function () {
