@@ -8,62 +8,108 @@ use Illuminate\Http\Request;
 
 class RetailDonationController extends Controller
 {
-    // Ambil semua data
+    /**
+     * Tampilkan semua data RetailDonation.
+     */
     public function index()
     {
-        return response()->json(RetailDonation::all());
+        $data = RetailDonation::all();
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
     }
 
-    // Ambil satu data berdasarkan ID
+    /**
+     * Tampilkan satu data berdasarkan ID.
+     */
     public function show($id)
     {
-        $info = RetailDonation::find($id);
+        $data = RetailDonation::find($id);
 
-        if (!$info) {
-            return response()->json(['message' => 'Data not found'], 404);
+        if (!$data) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data not found'
+            ], 404);
         }
 
-        return response()->json($info);
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
     }
 
-    // Simpan data baru
+    /**
+     * Simpan data baru ke tabel RetailDonation.
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
             'donation_id' => 'required|exists:donations,id',
-            'title'       => 'required|string',
+            'title'       => 'required|string|max:255',
             'description' => 'nullable|string',
-            'pricing' => 'required|integer',
-            'timestamps' => 'required|date_format:Y-m-d H:i:s'
+            'pricing'     => 'required|integer',
+            'active_at'   => 'required|date_format:Y-m-d H:i:s',
         ]);
 
-        $info = RetailDonation::create($validated);
-        return response()->json($info, 201);
+        $newData = RetailDonation::create($validated);
+
+        return response()->json([
+            'success' => true,
+            'data' => $newData
+        ], 201);
     }
 
-    // Perbarui data
+    /**
+     * Update data berdasarkan ID.
+     */
     public function update(Request $request, $id)
     {
-        $info = RetailDonation::findOrFail($id);
+        $data = RetailDonation::find($id);
+
+        if (!$data) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data not found'
+            ], 404);
+        }
 
         $validated = $request->validate([
             'donation_id' => 'required|exists:donations,id',
-            'title'       => 'required|string',
+            'title'       => 'required|string|max:255',
             'description' => 'nullable|string',
-            'pricing' => 'required|integer',
-            'timestamps' => 'required|date_format:Y-m-d H:i:s'
+            'pricing'     => 'required|integer',
+            'active_at'   => 'required|date_format:Y-m-d H:i:s',
         ]);
 
-        $info->update($validated);
-        return response()->json($info);
+        $data->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
     }
 
-    // Hapus data
+    /**
+     * Hapus data berdasarkan ID.
+     */
     public function destroy($id)
     {
-        $info = RetailDonation::findOrFail($id);
-        $info->delete();
+        $data = RetailDonation::find($id);
 
-        return response()->json(['message' => 'Deleted successfully']);
+        if (!$data) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data not found'
+            ], 404);
+        }
+
+        $data->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Deleted successfully'
+        ]);
     }
 }

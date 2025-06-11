@@ -154,11 +154,11 @@ Route::prefix('game-info')->name('game-info.')->group(function () {
 // Main Donation Routes
 // =======================
 $donationRoutes = [
-    'retail' => RetailDonationController::class,
-    'service' => ServiceDonationController::class,
-    'season-pass' => SeassonPassDonationController::class,
-    'package' => PackageDonationController::class,
-    'how-to' => HowToDonationController::class,
+    'retail-donation' => RetailDonationController::class,
+    'service-donation' => ServiceDonationController::class,
+    'seassonpass-donation' => SeassonPassDonationController::class,
+    'package-donation' => PackageDonationController::class,
+    'howto-donation' => HowToDonationController::class,
 ];
 
 Route::prefix('donations')->name('donations.')->group(function () use ($donationRoutes) {
