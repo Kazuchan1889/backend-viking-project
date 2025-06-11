@@ -29,6 +29,7 @@ class RegisteredUserController extends Controller
                             ->symbols(),
                         'max:12',],
                 'PIN' => ['required', 'digits:6'],
+                'role' => ['nullable', 'string', 'in:user,admin'],
             ]);
 
             $user = User::create([
@@ -38,13 +39,16 @@ class RegisteredUserController extends Controller
                 'PIN' => Hash::make($validated['PIN']),
             ]);
 
-            $user->assignRole('user'); // Assign default role
+            $role = $validated['role'] ?? 'user'; // default: user
+            $user->assignRole($role);
 
             event(new Registered($user));
 
-            Auth::login($user);
+            Log::info('User created: ID ' . $user->id);
 
             $token = $user->createToken('api-token')->plainTextToken;
+
+            Auth::login($user);
 
             return response()->json([
                 'user' => $user,
@@ -75,6 +79,7 @@ class RegisteredUserController extends Controller
 
             return response()->json([
                 'message' => 'Something went wrong during registration',
+                'error' => $e->getMessage(),
             ], 500); // 500 Internal Server Error
         }
     }
