@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\NewPasswordController;
 
 // Routes for News
 Route::get('news', [NewsController::class, 'index']);
@@ -18,14 +20,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
         return $request->user();
     });
 
-    Route::get('/logout', [AuthenticatedSessionController::class, 'destroy']);
+Route::middleware('auth:sanctum')->get('/logout', [AuthenticatedSessionController::class, 'destroy']);
 
-    Route::get('/me', function (Request $request) {
-        return response()->json([
-            'user' => $request->user(),
-            'role' => $request->user()->getRoleNames()->first()
-        ]);
-    });
+Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
+    return response()->json([
+        'user' => $request->user(),
+        'role' => $request->user()->getRoleNames()->first()
+    ]);
+});
+
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store']);
+Route::post('/reset-password', [NewPasswordController::class, 'store']);
 
     // Admin session endpoint
     Route::post('/admin/session', function () {
