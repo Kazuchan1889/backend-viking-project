@@ -12,7 +12,6 @@ class GemInformation extends Model
     use HasFactory;
 
     protected $fillable = [
-        'feature_information_id',
         'image',
         'name_item',
         'type',

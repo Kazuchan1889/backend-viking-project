@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class RaceHqNpc extends Model
 {
-    protected $fillable = ['npc_list_id', 'title', 'description'];
+    protected $fillable = ['npc', 'buy_with'];
 
     public function npcList()
     {
@@ -14,3 +14,4 @@ class RaceHqNpc extends Model
     }
 }
 
+ 

@@ -14,6 +14,7 @@ class PackageDonation extends Model
         'title',
         'description',
         'pricing',
+        'timestamps',
     ];
 
     public function donation()

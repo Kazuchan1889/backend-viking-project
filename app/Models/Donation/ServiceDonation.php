@@ -12,8 +12,8 @@ class ServiceDonation extends Model
     protected $fillable = [
         'donation_id', // foreign key
         'title',
-        'pricing',
         'description',
+        'pricing',
         'timestamps',
     ];
 

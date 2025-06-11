@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('pendant_information', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('feature_information_id')->constrained('feature_information')->onDelete('cascade');
+            $table->foreignId('game_information_id')->constrained('game_infos')->onDelete('cascade');
             $table->string('image');
             $table->string('name_item');
             $table->string('type');

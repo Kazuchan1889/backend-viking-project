@@ -1,105 +1,148 @@
 <?php
 
-use App\Http\Controllers\Api\GameInfoSectionController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\DonationController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Api\ServerRulesController;
+use App\Http\Controllers\Api\MapInformationController;
+use App\Http\Controllers\Api\RaceHqNpcController;
+use App\Http\Controllers\Api\DonationController;
 use App\Http\Controllers\Api\Donation\RetailDonationController;
 use App\Http\Controllers\Api\Donation\ServiceDonationController;
-use App\Http\Controllers\Api\Donation\SeassonPassDonationController; // Corrected typo: SeassonPass to SeasonPass
+use App\Http\Controllers\Api\Donation\SeassonPassDonationController;
 use App\Http\Controllers\Api\Donation\PackageDonationController;
 use App\Http\Controllers\Api\Donation\HowToDonationController;
-// use App\Http\Controllers\GameInfo\ServerInfo\GeneralInfo\GeneralInformationController;
-
-// From the other branch's changes
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-
+use App\Http\Controllers\Api\GemInformationController;
+use App\Models\GameInfo\ServerInfo\FeatureInfo\PendantInformation;
+use App\Models\GameInfo\QuestInfo\{
+    DailyQuestAfterWar,
+    DailyQuestTuesday,
+    DailyQuestWednesday,
+    DailyQuestThursday,
+    DailyQuestFriday,
+    DailyQuestSaturday,
+    DailyQuestSunday
+};
 
 // =======================
-// Game Info Group
+// Game Info Routes
 // =======================
 Route::prefix('game-info')->name('game-info.')->group(function () {
-    Route::get('/', [GameInfoSectionController::class, 'index'])->name('index');
-    Route::post('/', [GameInfoSectionController::class, 'store'])->name('store');
-    Route::get('/{id}', [GameInfoSectionController::class, 'show'])->name('show');
-    Route::put('/{id}', [GameInfoSectionController::class, 'update'])->name('update');
-    Route::delete('/{id}', [GameInfoSectionController::class, 'destroy'])->name('destroy');
-});
 
+    // --------------------
+    // Server Information
+    // --------------------
+    Route::prefix('server-information')->name('server-information.')->group(function () {
 
-// =======================
-// Server Rules Group
-// =======================
-Route::prefix('server')->name('server.')->group(function () {
-    Route::get('/', [ServerRulesController::class, 'index'])->name('index');
-    Route::post('/', [ServerRulesController::class, 'store'])->name('store');
-    Route::get('/{id}', [ServerRulesController::class, 'show'])->name('show');
-    Route::put('/{id}', [ServerRulesController::class, 'update'])->name('update');
-    Route::delete('/{id}', [ServerRulesController::class, 'destroy'])->name('destroy');
+        // Pendant Info
+        Route::get('/pendant-information/{id}', [PendantInformation::class, 'index'])->name('pendant.index');
+        Route::post('/pendant-information', [PendantInformation::class, 'store'])->name('pendant.store');
+        Route::get('/pendant-information', [PendantInformation::class, 'show'])->name('pendant.show');
+        Route::put('/pendant-information/{id}', [PendantInformation::class, 'update'])->name('pendant.update');
+        Route::delete('/pendant-information/{id}', [PendantInformation::class, 'destroy'])->name('pendant.destroy');
+
+        // Gem Info
+        Route::get('/gem-information/{id}', [GemInformationController::class, 'index'])->name('gem.index');
+        Route::post('/gem-information', [GemInformationController::class, 'store'])->name('gem.store');
+        Route::get('/gem-information', [GemInformationController::class, 'show'])->name('gem.show');
+        Route::put('/gem-information/{id}', [GemInformationController::class, 'update'])->name('gem.update');
+        Route::delete('/gem-information/{id}', [GemInformationController::class, 'destroy'])->name('gem.destroy');
+
+        // NPC Info
+        Route::get('/npc-list-information/{id}', [RaceHqNpcController::class, 'index'])->name('npc.index');
+        Route::post('/npc-list-information', [RaceHqNpcController::class, 'store'])->name('npc.store');
+        Route::get('/npc-list-information', [RaceHqNpcController::class, 'show'])->name('npc.show');
+        Route::put('/npc-list-information/{id}', [RaceHqNpcController::class, 'update'])->name('npc.update');
+        Route::delete('/npc-list-information/{id}', [RaceHqNpcController::class, 'destroy'])->name('npc.destroy');
+
+        // Drop List Info
+        Route::get('/drop-list-information/{id}', [RaceHqNpcController::class, 'index'])->name('drop.index');
+        Route::post('/drop-list-information', [RaceHqNpcController::class, 'store'])->name('drop.store');
+        Route::get('/drop-list-information', [RaceHqNpcController::class, 'show'])->name('drop.show');
+        Route::put('/drop-list-information/{id}', [RaceHqNpcController::class, 'update'])->name('drop.update');
+        Route::delete('/drop-list-information/{id}', [RaceHqNpcController::class, 'destroy'])->name('drop.destroy');
+    });
+
+    // --------------------
+    // Quest Information
+    // --------------------
+    Route::prefix('quest-information')->name('quest-information.')->group(function () {
+        $quests = [
+            'after-war' => DailyQuestAfterWar::class,
+            'tuesday' => DailyQuestTuesday::class,
+            'wednesday' => DailyQuestWednesday::class,
+            'thursday' => DailyQuestThursday::class,
+            'friday' => DailyQuestFriday::class,
+            'saturday' => DailyQuestSaturday::class,
+            'sunday' => DailyQuestSunday::class,
+        ];
+
+        foreach ($quests as $prefix => $controller) {
+            Route::prefix($prefix)->name("$prefix.")->group(function () use ($controller) {
+                Route::get('/{id}', [$controller, 'index'])->name('index');
+                Route::post('/', [$controller, 'store'])->name('store');
+                Route::get('/', [$controller, 'show'])->name('show');
+                Route::put('/{id}', [$controller, 'update'])->name('update');
+                Route::delete('/{id}', [$controller, 'destroy'])->name('destroy');
+            });
+        }
+    });
+
+    // --------------------
+    // Server Rules
+    // --------------------
+    Route::prefix('server-rules')->name('server-rules.')->group(function () {
+        Route::get('/', [ServerRulesController::class, 'index'])->name('index');
+        Route::post('/', [ServerRulesController::class, 'store'])->name('store');
+        Route::get('/{id}', [ServerRulesController::class, 'show'])->name('show');
+        Route::put('/{id}', [ServerRulesController::class, 'update'])->name('update');
+        Route::delete('/{id}', [ServerRulesController::class, 'destroy'])->name('destroy');
+    });
+
+    // --------------------
+    // Map Information
+    // --------------------
+    Route::prefix('map-information')->name('map-information.')->group(function () {
+        Route::get('/', [MapInformationController::class, 'index'])->name('index');
+        Route::post('/', [MapInformationController::class, 'store'])->name('store');
+        Route::get('/{id}', [MapInformationController::class, 'show'])->name('show');
+        Route::put('/{id}', [MapInformationController::class, 'update'])->name('update');
+        Route::delete('/{id}', [MapInformationController::class, 'destroy'])->name('destroy');
+    });
 });
 
 // =======================
 // Main Donation Routes
 // =======================
-Route::prefix('donations')->name('donations.')->group(function () {
+$donationRoutes = [
+    'retail' => RetailDonationController::class,
+    'service' => ServiceDonationController::class,
+    'season-pass' => SeassonPassDonationController::class,
+    'package' => PackageDonationController::class,
+    'how-to' => HowToDonationController::class,
+];
+
+Route::prefix('donations')->name('donations.')->group(function () use ($donationRoutes) {
     Route::get('/', [DonationController::class, 'index'])->name('index');
     Route::post('/', [DonationController::class, 'store'])->name('store');
     Route::get('/{id}', [DonationController::class, 'show'])->name('show');
     Route::put('/{id}', [DonationController::class, 'update'])->name('update');
     Route::delete('/{id}', [DonationController::class, 'destroy'])->name('destroy');
-});
 
-
-// =======================
-// Specific Donation Type Routes
-// =======================
-Route::prefix('retail-donations')->name('retail-donations.')->group(function () {
-    Route::get('/', [RetailDonationController::class, 'index'])->name('index');
-    Route::post('/', [RetailDonationController::class, 'store'])->name('store');
-    Route::get('/{id}', [RetailDonationController::class, 'show'])->name('show');
-    Route::put('/{id}', [RetailDonationController::class, 'update'])->name('update');
-    Route::delete('/{id}', [RetailDonationController::class, 'destroy'])->name('destroy');
-});
-
-Route::prefix('service-donations')->name('service-donations.')->group(function () {
-    Route::get('/', [ServiceDonationController::class, 'index'])->name('index');
-    Route::post('/', [ServiceDonationController::class, 'store'])->name('store');
-    Route::get('/{id}', [ServiceDonationController::class, 'show'])->name('show');
-    Route::put('/{id}', [ServiceDonationController::class, 'update'])->name('update');
-    Route::delete('/{id}', [ServiceDonationController::class, 'destroy'])->name('destroy');
-});
-
-Route::prefix('seasonpass-donations')->name('seasonpass-donations.')->group(function () {
-    // Corrected controller name
-    Route::get('/', [SeassonPassDonationController::class, 'index'])->name('index');
-    Route::post('/', [SeassonPassDonationController::class, 'store'])->name('store');
-    Route::get('/{id}', [SeassonPassDonationController::class, 'show'])->name('show');
-    Route::put('/{id}', [SeassonPassDonationController::class, 'update'])->name('update');
-    Route::delete('/{id}', [SeassonPassDonationController::class, 'destroy'])->name('destroy');
-});
-
-Route::prefix('package-donations')->name('package-donations.')->group(function () {
-    Route::get('/', [PackageDonationController::class, 'index'])->name('index');
-    Route::post('/', [PackageDonationController::class, 'store'])->name('store');
-    Route::get('/{id}', [PackageDonationController::class, 'show'])->name('show');
-    Route::put('/{id}', [PackageDonationController::class, 'update'])->name('update');
-    Route::delete('/{id}', [PackageDonationController::class, 'destroy'])->name('destroy');
-});
-
-Route::prefix('howto-donations')->name('howto-donations.')->group(function () {
-    Route::get('/', [HowToDonationController::class, 'index'])->name('index');
-    Route::post('/', [HowToDonationController::class, 'store'])->name('store');
-    Route::get('/{id}', [HowToDonationController::class, 'show'])->name('show');
-    Route::put('/{id}', [HowToDonationController::class, 'update'])->name('update');
-    Route::delete('/{id}', [HowToDonationController::class, 'destroy'])->name('destroy');
+    foreach ($donationRoutes as $prefix => $controller) {
+        Route::prefix($prefix)->name("$prefix.")->group(function () use ($controller) {
+            Route::get('/', [$controller, 'index'])->name('index');
+            Route::post('/', [$controller, 'store'])->name('store');
+            Route::get('/{id}', [$controller, 'show'])->name('show');
+            Route::put('/{id}', [$controller, 'update'])->name('update');
+            Route::delete('/{id}', [$controller, 'destroy'])->name('destroy');
+        });
+    }
 });
 
 // =======================
-// Authentication Routes (from the other branch)
+// Authentication Routes
 // =======================
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-
 Route::middleware('auth:sanctum')->get('/logout', [AuthenticatedSessionController::class, 'destroy']);
 
-// This line typically pulls in additional authentication-related routes (e.g., for registration, password reset)
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

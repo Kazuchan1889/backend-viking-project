@@ -14,6 +14,7 @@ class HowToDonation extends Model
         'title',
         'description',
         'pricing',
+        'timestamps',
     ];
 
     public function donation()

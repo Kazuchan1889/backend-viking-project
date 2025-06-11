@@ -12,7 +12,6 @@ class FeaturesEnable extends Model
     use HasFactory;
 
     protected $fillable = [
-        'general_information_id',
         'title',
         'description',
     ];

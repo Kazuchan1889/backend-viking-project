@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('drop_on_hq', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('drop_list_id')->constrained('drop_lists')->onDelete('cascade');
+            $table->foreignId('game_information_id')->constrained('game_infos')->onDelete('cascade');
             $table->string('title');
             $table->string('description');
             $table->timestamps();

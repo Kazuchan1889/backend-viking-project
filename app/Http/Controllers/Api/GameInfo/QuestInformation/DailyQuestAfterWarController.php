@@ -26,7 +26,6 @@ class DailyQuestAfterWarController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'quest_information_id' => 'required|exists:quest_information,id',
             'image' => 'required|string',
             'daily_quest' => 'required|string',
             'map' => 'required|string',

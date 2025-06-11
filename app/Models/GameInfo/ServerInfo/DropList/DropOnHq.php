@@ -12,7 +12,6 @@ class DropOnHq extends Model
     use HasFactory;
 
     protected $fillable = [
-        'drop_list_id',
         'title',
         'description',
     ];

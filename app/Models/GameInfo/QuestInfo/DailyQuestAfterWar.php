@@ -11,7 +11,6 @@ class DailyQuestAfterWar extends Model
     use HasFactory;
 
     protected $fillable = [
-        'quest_information_id',
         'image',
         'daily_quest',
         'map',

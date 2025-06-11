@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('race_hq_npcs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('npc_list_informations_id')->constrained('npc_list_informations')->onDelete('cascade');
+            $table->foreignId('game_information_id')->constrained('game_infos')->onDelete('cascade');
             $table->string('npc'); // Nama NPC
             $table->string('buy_with'); // Bisa "Gold", "Points", dsb
             $table->timestamps();
