@@ -22,7 +22,12 @@ class RegisteredUserController extends Controller
             $validated = $request->validate([
                 'username' => ['required', 'string', 'max:255', 'unique:users,username'],
                 'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
-                'password' => ['required', 'confirmed', Rules\Password::defaults()],
+                'password' => ['required', 'confirmed', Rules\Password::min(8)
+                            ->mixedCase()
+                            ->letters()
+                            ->numbers()
+                            ->symbols(),
+                        'max:12',],
                 'PIN' => ['required', 'digits:6'],
             ]);
 
@@ -33,6 +38,8 @@ class RegisteredUserController extends Controller
                 'PIN' => Hash::make($validated['PIN']),
                 'is_admin' => $request->is_admin,
             ]);
+
+            $user->assignRole('user'); // Assign default role
 
             event(new Registered($user));
 
