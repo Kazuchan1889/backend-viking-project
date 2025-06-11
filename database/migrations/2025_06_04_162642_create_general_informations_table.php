@@ -1,0 +1,24 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateGeneralInformationsTable extends Migration
+{
+    public function up()
+    {
+        Schema::create('general_informations', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('server_information_id')->constrained('server_information')->onDelete('cascade');
+            $table->string('category');
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('general_informations');
+    }
+}
+

@@ -12,6 +12,7 @@ class PackageDonation extends Model
     protected $fillable = [
         'donation_id', // foreign key
         'title',
+        'description',
         'pricing',
     ];
 

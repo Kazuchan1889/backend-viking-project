@@ -13,6 +13,7 @@ class ServiceDonation extends Model
         'donation_id', // foreign key
         'title',
         'pricing',
+        'description',
         'timestamps',
     ];
 

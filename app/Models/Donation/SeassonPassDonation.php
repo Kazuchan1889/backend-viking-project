@@ -13,6 +13,7 @@ class SeassonPassDonation extends Model
         'donation_id', // foreign key
         'title',
         'pricing',
+        'description',
         'timestamps',
     ];
 
