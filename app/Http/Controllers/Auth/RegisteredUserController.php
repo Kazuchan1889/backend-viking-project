@@ -37,7 +37,6 @@ class RegisteredUserController extends Controller
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
                 'PIN' => Hash::make($validated['PIN']),
-                'is_admin' => $request->is_admin,
             ]);
 
             $role = $validated['role'] ?? 'user'; // default: user
