@@ -42,7 +42,6 @@ class DailyQuestAfterWarController extends Controller
         $info = DailyQuestAfterWar::findOrFail($id);
 
         $validated = $request->validate([
-            'quest_information_id' => 'required|exists:quest_information,id',
             'image' => 'required|string',
             'daily_quest' => 'required|string',
             'map' => 'required|string',

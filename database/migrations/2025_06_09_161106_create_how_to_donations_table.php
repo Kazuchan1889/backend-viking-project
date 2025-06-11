@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId(column: 'donation_id')->constrained('donations')->onDelete('cascade');
             $table->string(column: 'title');
             $table->text('description')->nullable();
-            $table->integer('pricing')->nullable();
             $table->timestamps();
         });
     }

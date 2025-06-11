@@ -13,7 +13,6 @@ class HowToDonation extends Model
         'donation_id', // foreign key
         'title',
         'description',
-        'pricing',
         'timestamps',
     ];
 

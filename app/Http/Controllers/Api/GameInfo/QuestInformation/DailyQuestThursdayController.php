@@ -41,7 +41,6 @@ class DailyQuestThursdayController extends Controller
         $info = DailyQuestThursday::findOrFail($id);
 
         $validated = $request->validate([
-            'quest_information_id' => 'required|exists:quest_information,id',
             'image' => 'required|string',
             'tutorial' => 'required|string',
             'quest' => 'required|string',

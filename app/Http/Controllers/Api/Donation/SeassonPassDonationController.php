@@ -44,6 +44,7 @@ class SeassonPassDonationController extends Controller
         $validated = $request->validate([
             'donation_id' => 'required|exists:donations,id',
             'title' => 'required|string',
+            'description' => 'nullable|string',
             'pricing' => 'required|integer',
             'timestamps' => 'required|date_format:Y-m-d H:i:s'
         ]);

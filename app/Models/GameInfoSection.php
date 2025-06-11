@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\GameInfo\ServerInfo\ServerInformationGameInfo;
 use App\Models\GameInfo\QuestInfo\QuestInformation;
 use App\Models\GameInfo\ServerRules;
+use App\Models\GameInfo\MapInformation;
 
 
 class GameInfoSection extends Model
@@ -27,5 +28,10 @@ class GameInfoSection extends Model
     public function serverRules()
     {
         return $this->hasMany(ServerRules::class);
+    }
+
+    public function mapInformation()
+    {
+        return $this->hasMany(MapInformation::class);
     }
 }

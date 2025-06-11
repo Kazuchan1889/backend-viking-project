@@ -29,7 +29,6 @@ class HowToDonationController extends Controller
             'donation_id' => 'required|exists:donations,id',
             'title' => 'required|string',
             'description' => 'nullable|string',
-            'pricing' => 'required|integer',
             'timestamps' => 'required|date_format:Y-m-d H:i:s',
         ]);
 
@@ -44,7 +43,7 @@ class HowToDonationController extends Controller
         $validated = $request->validate([
             'donation_id' => 'required|exists:donations,id',
             'title' => 'required|string',
-            'pricing' => 'required|integer',
+            'description' => 'nullable|string',
             'timestamps' => 'required|date_format:Y-m-d H:i:s',
         ]);
 
