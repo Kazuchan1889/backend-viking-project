@@ -20,12 +20,25 @@ use App\Models\GameInfo\QuestInfo\{
     DailyQuestThursday,
     DailyQuestFriday,
     DailyQuestSaturday,
-    DailyQuestSunday
+    DailyQuestSunday,
+};
+use App\Models\GameInfo\ServerInfo\DropList\{
+    DropOnHq,
+    ElanPlateau,
+    ElfLand,
+    EtherPlatform,
+    OutcastLand,
+    PitbossDrop,
+    SetteDesert,
+    VolcanicCauldron,
+};
+use App\Models\GameInfo\ServerInfo\NPCList\{
+    ElanPlateauNpc,
+    RaceHqNpc,
+    SetteDessertNpc,
+    VolcanicCauldronNpc,
 };
 
-// =======================
-// Game Info Routes
-// =======================
 Route::prefix('game-info')->name('game-info.')->group(function () {
 
     // --------------------
@@ -48,19 +61,46 @@ Route::prefix('game-info')->name('game-info.')->group(function () {
         Route::delete('/gem-information/{id}', [GemInformationController::class, 'destroy'])->name('gem.destroy');
 
         // NPC Info
-        Route::get('/npc-list-information/{id}', [RaceHqNpcController::class, 'index'])->name('npc.index');
-        Route::post('/npc-list-information', [RaceHqNpcController::class, 'store'])->name('npc.store');
-        Route::get('/npc-list-information', [RaceHqNpcController::class, 'show'])->name('npc.show');
-        Route::put('/npc-list-information/{id}', [RaceHqNpcController::class, 'update'])->name('npc.update');
-        Route::delete('/npc-list-information/{id}', [RaceHqNpcController::class, 'destroy'])->name('npc.destroy');
+        $npclist = [
+            'elanplateaunpc' => ElanPlateauNpc::class,
+            'racehqnpc' => RaceHqNpc::class,
+            'settedessertnpc' => SetteDessertNpc::class,
+            'volcaniccauldronnpc' => VolcanicCauldronNpc::class,
+        ];
+
+        foreach ($npclist as $prefix => $controller) {
+            Route::prefix($prefix)->name("$prefix.")->group(function () use ($controller) {
+                Route::get('/{id}', [$controller, 'index'])->name('index');
+                Route::post('/', [$controller, 'store'])->name('store');
+                Route::get('/', [$controller, 'show'])->name('show');
+                Route::put('/{id}', [$controller, 'update'])->name('update');
+                Route::delete('/{id}', [$controller, 'destroy'])->name('destroy');
+            });
+        }
 
         // Drop List Info
-        Route::get('/drop-list-information/{id}', [RaceHqNpcController::class, 'index'])->name('drop.index');
-        Route::post('/drop-list-information', [RaceHqNpcController::class, 'store'])->name('drop.store');
-        Route::get('/drop-list-information', [RaceHqNpcController::class, 'show'])->name('drop.show');
-        Route::put('/drop-list-information/{id}', [RaceHqNpcController::class, 'update'])->name('drop.update');
-        Route::delete('/drop-list-information/{id}', [RaceHqNpcController::class, 'destroy'])->name('drop.destroy');
+        $droplist = [
+            'droponhq' => DropOnHq::class,
+            'elanplateau' => ElanPlateau::class,
+            'elfland' => ElfLand::class,
+            'etherplatform' => EtherPlatform::class,
+            'outcastland' => OutcastLand::class,
+            'pitbossdrop' => PitbossDrop::class,
+            'settedessert' => SetteDesert::class,
+            'volcaniccauldron' => VolcanicCauldron::class,
+        ];
+
+        foreach ($droplist as $prefix => $controller) {
+            Route::prefix($prefix)->name("$prefix.")->group(function () use ($controller) {
+                Route::get('/{id}', [$controller, 'index'])->name('index');
+                Route::post('/', [$controller, 'store'])->name('store');
+                Route::get('/', [$controller, 'show'])->name('show');
+                Route::put('/{id}', [$controller, 'update'])->name('update');
+                Route::delete('/{id}', [$controller, 'destroy'])->name('destroy');
+            });
+        }
     });
+
 
     // --------------------
     // Quest Information

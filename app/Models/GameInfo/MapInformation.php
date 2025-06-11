@@ -10,7 +10,7 @@ class MapInformation extends Model
     use HasFactory;
 
     protected $fillable = [
-        'game_info_id',
+        'game_information_id',
         'location_name',
         'image',
     ];

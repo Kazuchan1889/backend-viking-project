@@ -26,7 +26,7 @@ class RaceHqNpcController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'npc_list_id' => 'required|exists:npc_lists,id',
+            'game_information_id' => 'required|exists:game_infos,id',
             'npc' => 'required|string|max:255',     // lowercase key untuk konsistensi
             'buy_with' => 'required|string',
         ]);
@@ -40,7 +40,7 @@ class RaceHqNpcController extends Controller
         $npc = RaceHqNpc::findOrFail($id);
 
         $validated = $request->validate([
-            'npc_list_id' => 'required|exists:npc_lists,id',
+            'game_information_id' => 'required|exists:game_infos,id',
             'npc' => 'required|string|max:255',
             'buy_with' => 'required|string',
         ]);

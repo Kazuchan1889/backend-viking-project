@@ -3,20 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\GameInfo\ServerInfo\DropList\DropOnHq;
+use App\Models\GameInfo\ServerInfo\DropList\Cargmine;
+
 use Illuminate\Http\Request;
 
-class DropOnHqController extends Controller
+class CargmineController extends Controller
 {
     public function index()
     {
-        $npcs = DropOnHq::all();
+        $npcs = Cargmine::all();
         return response()->json($npcs);
     }
 
     public function show($id)
     {
-        $npc = DropOnHq::find($id);
+        $npc = Cargmine::find($id);
         if (!$npc) {
             return response()->json(['message' => 'description is not found'], 404);
         }
@@ -31,13 +32,13 @@ class DropOnHqController extends Controller
             'description' => 'required|string',
         ]);
 
-        $npc = DropOnHq::create($validated);
+        $npc = Cargmine::create($validated);
         return response()->json($npc, 201);
     }
 
     public function update(Request $request, $id)
     {
-        $npc = DropOnHq::findOrFail($id);
+        $npc = Cargmine::findOrFail($id);
 
         $validated = $request->validate([
             'game_information_id' => 'required|exists:game_infos,id',
@@ -51,7 +52,7 @@ class DropOnHqController extends Controller
 
     public function destroy($id)
     {
-        $npc = DropOnHq::findOrFail($id);
+        $npc = Cargmine::findOrFail($id);
         $npc->delete();
 
         return response()->json(['message' => 'Deleted successfully']);

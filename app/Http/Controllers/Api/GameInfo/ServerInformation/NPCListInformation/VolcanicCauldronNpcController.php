@@ -3,22 +3,22 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\GameInfo\ServerInfo\DropList\DropOnHq;
+use App\Models\GameInfo\ServerInfo\NPCList\VolcanicCauldronNpc;
 use Illuminate\Http\Request;
 
-class DropOnHqController extends Controller
+class VolcanicCauldronNpcController extends Controller
 {
     public function index()
     {
-        $npcs = DropOnHq::all();
+        $npcs = VolcanicCauldronNpc::all();
         return response()->json($npcs);
     }
 
     public function show($id)
     {
-        $npc = DropOnHq::find($id);
+        $npc = VolcanicCauldronNpc::find($id);
         if (!$npc) {
-            return response()->json(['message' => 'description is not found'], 404);
+            return response()->json(['message' => 'NPC is not found'], 404);
         }
         return response()->json($npc);
     }
@@ -27,22 +27,22 @@ class DropOnHqController extends Controller
     {
         $validated = $request->validate([
             'game_information_id' => 'required|exists:game_infos,id',
-            'title' => 'required|string|max:255',     // lowercase key untuk konsistensi
-            'description' => 'required|string',
+            'npc' => 'required|string|max:255',     // lowercase key untuk konsistensi
+            'buy_with' => 'required|string',
         ]);
 
-        $npc = DropOnHq::create($validated);
+        $npc = VolcanicCauldronNpc::create($validated);
         return response()->json($npc, 201);
     }
 
     public function update(Request $request, $id)
     {
-        $npc = DropOnHq::findOrFail($id);
+        $npc = VolcanicCauldronNpc::findOrFail($id);
 
         $validated = $request->validate([
             'game_information_id' => 'required|exists:game_infos,id',
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'npc' => 'required|string|max:255',
+            'buy_with' => 'required|string',
         ]);
 
         $npc->update($validated);
@@ -51,7 +51,7 @@ class DropOnHqController extends Controller
 
     public function destroy($id)
     {
-        $npc = DropOnHq::findOrFail($id);
+        $npc = VolcanicCauldronNpc::findOrFail($id);
         $npc->delete();
 
         return response()->json(['message' => 'Deleted successfully']);

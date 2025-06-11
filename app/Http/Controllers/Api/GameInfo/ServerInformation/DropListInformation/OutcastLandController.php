@@ -3,20 +3,20 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\GameInfo\ServerInfo\DropList\DropOnHq;
+use App\Models\GameInfo\ServerInfo\DropList\OutcastLand;
 use Illuminate\Http\Request;
 
-class DropOnHqController extends Controller
+class OutcastLandController extends Controller
 {
     public function index()
     {
-        $npcs = DropOnHq::all();
+        $npcs = OutcastLand::all();
         return response()->json($npcs);
     }
 
     public function show($id)
     {
-        $npc = DropOnHq::find($id);
+        $npc = OutcastLand::find($id);
         if (!$npc) {
             return response()->json(['message' => 'description is not found'], 404);
         }
@@ -31,13 +31,13 @@ class DropOnHqController extends Controller
             'description' => 'required|string',
         ]);
 
-        $npc = DropOnHq::create($validated);
+        $npc = OutcastLand::create($validated);
         return response()->json($npc, 201);
     }
 
     public function update(Request $request, $id)
     {
-        $npc = DropOnHq::findOrFail($id);
+        $npc = OutcastLand::findOrFail($id);
 
         $validated = $request->validate([
             'game_information_id' => 'required|exists:game_infos,id',
@@ -51,7 +51,7 @@ class DropOnHqController extends Controller
 
     public function destroy($id)
     {
-        $npc = DropOnHq::findOrFail($id);
+        $npc = OutcastLand::findOrFail($id);
         $npc->delete();
 
         return response()->json(['message' => 'Deleted successfully']);
