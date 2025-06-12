@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('cragmine', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('game_information_id')->constrained('game_infos')->onDelete('cascade');
+            $table->foreignId('game_information_id')->constrained('game_informations')->onDelete('cascade');
             $table->string('title');
             $table->string('description');
             $table->timestamps();

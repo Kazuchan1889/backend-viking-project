@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('volcanic_cauldrons', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('drop_list_id')->constrained()->onDelete('cascade');
+            $table->foreignId('game_information_id')->constrained('game_informations')->onDelete('cascade');
             $table->string('title');
             $table->string('description');
             $table->timestamps();

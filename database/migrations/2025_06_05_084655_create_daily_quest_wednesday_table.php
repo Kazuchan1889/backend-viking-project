@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('daily_quest_wednesdays', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('game_information_id')->constrained('game_infos')->onDelete('cascade');
+            $table->foreignId('game_information_id')->constrained('game_informations')->onDelete('cascade');
             $table->string('image')->nullable();
             $table->string('tutorial');
             $table->string('quest');
