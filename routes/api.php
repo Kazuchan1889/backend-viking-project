@@ -13,6 +13,9 @@ use App\Http\Controllers\Api\Donation\PackageDonationController;
 use App\Http\Controllers\Api\Donation\HowToDonationController;
 use App\Http\Controllers\Api\GemInformationController;
 use App\Models\GameInfo\ServerInfo\FeatureInfo\PendantInformation;
+use App\Http\Controllers\Api\GameInfo\ServerInfo\GeneralInfo\FeaturesInfo\FeaturesDisableController;
+use App\Http\Controllers\Api\GameInfo\ServerInfo\GeneralInfo\FeaturesInfo\FeaturesEnableController;
+
 use App\Models\GameInfo\QuestInfo\{
     DailyQuestAfterWar,
     DailyQuestTuesday,
@@ -60,6 +63,19 @@ Route::prefix('game-info')->name('game-info.')->group(function () {
         Route::put('/gem-information/{id}', [GemInformationController::class, 'update'])->name('gem.update');
         Route::delete('/gem-information/{id}', [GemInformationController::class, 'destroy'])->name('gem.destroy');
 
+        Route::get('/feature-disable/{id}', [FeaturesDisableController::class, 'index'])->name('featuresdisable.index');
+        Route::post('/feature-disable', [FeaturesDisableController::class, 'store'])->name('featuresdisable.store');
+        Route::get('/feature-disable', [FeaturesDisableController::class, 'show'])->name('featuresdisable.show');
+        Route::put('/feature-disable/{id}', [FeaturesDisableController::class, 'update'])->name('featuresdisable.update');
+        Route::delete('/feature-disable/{id}', [FeaturesDisableController::class, 'destroy'])->name('featuresdisable.destroy');
+
+        // Gem Info
+        Route::get('/feature-enable/{id}', [FeaturesEnableController::class, 'index'])->name('featuresenable.index');
+        Route::post('/gem-information', [FeaturesEnableController::class, 'store'])->name('featuresenable.store');
+        Route::get('/gem-information', [FeaturesEnableController::class, 'show'])->name('featuresenable.show');
+        Route::put('/gem-information/{id}', [FeaturesEnableController::class, 'update'])->name('featuresenable.update');
+        Route::delete('/gem-information/{id}', [FeaturesEnableController::class, 'destroy'])->name('featuresenable.destroy');
+
         // NPC Info
         $npclist = [
             'elanplateaunpc' => ElanPlateauNpc::class,
@@ -86,7 +102,7 @@ Route::prefix('game-info')->name('game-info.')->group(function () {
             'etherplatform' => EtherPlatform::class,
             'outcastland' => OutcastLand::class,
             'pitbossdrop' => PitbossDrop::class,
-            'settedessert' => SetteDesert::class,
+            'settedesert' => SetteDesert::class,
             'volcaniccauldron' => VolcanicCauldron::class,
         ];
 
@@ -107,13 +123,13 @@ Route::prefix('game-info')->name('game-info.')->group(function () {
     // --------------------
     Route::prefix('quest-information')->name('quest-information.')->group(function () {
         $quests = [
-            'after-war' => DailyQuestAfterWar::class,
-            'tuesday' => DailyQuestTuesday::class,
-            'wednesday' => DailyQuestWednesday::class,
-            'thursday' => DailyQuestThursday::class,
-            'friday' => DailyQuestFriday::class,
-            'saturday' => DailyQuestSaturday::class,
-            'sunday' => DailyQuestSunday::class,
+            'dailyquestafterwar' => DailyQuestAfterWar::class,
+            'dailyquesttuesday' => DailyQuestTuesday::class,
+            'dailyquestwednesday' => DailyQuestWednesday::class,
+            'dailyquestthursday' => DailyQuestThursday::class,
+            'dailyquestfriday' => DailyQuestFriday::class,
+            'dailyquestsaturday' => DailyQuestSaturday::class,
+            'dailyquestsunday' => DailyQuestSunday::class,
         ];
 
         foreach ($quests as $prefix => $controller) {
@@ -141,7 +157,7 @@ Route::prefix('game-info')->name('game-info.')->group(function () {
     // --------------------
     // Map Information
     // --------------------
-    Route::prefix('map-information')->name('map-information.')->group(function () {
+    Route::prefix('mapinfo')->name('mapinfo.')->group(function () {
         Route::get('/', [MapInformationController::class, 'index'])->name('index');
         Route::post('/', [MapInformationController::class, 'store'])->name('store');
         Route::get('/{id}', [MapInformationController::class, 'show'])->name('show');

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\GameInfo\ServerInfo\GeneralInfo\FeaturesInfo;
 
 use App\Http\Controllers\Controller;
 use App\Models\GameInfo\ServerInfo\GeneralInfo\FeaturesInfo\FeaturesEnable;
