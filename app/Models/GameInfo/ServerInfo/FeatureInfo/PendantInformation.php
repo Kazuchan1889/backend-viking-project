@@ -12,6 +12,7 @@ class PendantInformation extends Model
     use HasFactory;
 
     protected $fillable = [
+        'game_information_id',
         'image',
         'name_item',
         'type',

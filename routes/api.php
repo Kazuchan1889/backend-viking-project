@@ -1,9 +1,10 @@
 <?php
-
+use App\Http\Controllers\Api\GameInfo\ServerInformation\FeatureInformation\PendantInformationController;
+use App\Http\Controllers\Api\GameInfo\ServerInformation\FeatureInformation\GemInformationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Api\ServerRulesController;
-use App\Http\Controllers\Api\MapInformationController;
+use App\Http\Controllers\Api\MapInformationController; // Asumsi ini adalah controller generik untuk Maps
 use App\Http\Controllers\Api\RaceHqNpcController;
 use App\Http\Controllers\Api\DonationController;
 use App\Http\Controllers\Api\Donation\RetailDonationController;
@@ -11,8 +12,6 @@ use App\Http\Controllers\Api\Donation\ServiceDonationController;
 use App\Http\Controllers\Api\Donation\SeassonPassDonationController;
 use App\Http\Controllers\Api\Donation\PackageDonationController;
 use App\Http\Controllers\Api\Donation\HowToDonationController;
-use App\Http\Controllers\Api\GemInformationController;
-use App\Models\GameInfo\ServerInfo\FeatureInfo\PendantInformation;
 use App\Http\Controllers\Api\GameInfo\ServerInfo\GeneralInfo\FeaturesInfo\FeaturesDisableController;
 use App\Http\Controllers\Api\GameInfo\ServerInfo\GeneralInfo\FeaturesInfo\FeaturesEnableController;
 
@@ -50,31 +49,32 @@ Route::prefix('game-info')->name('game-info.')->group(function () {
     Route::prefix('server-information')->name('server-information.')->group(function () {
 
         // Pendant Info
-        Route::get('/pendant-information/{id}', [PendantInformation::class, 'index'])->name('pendant.index');
-        Route::post('/pendant-information', [PendantInformation::class, 'store'])->name('pendant.store');
-        Route::get('/pendant-information', [PendantInformation::class, 'show'])->name('pendant.show');
-        Route::put('/pendant-information/{id}', [PendantInformation::class, 'update'])->name('pendant.update');
-        Route::delete('/pendant-information/{id}', [PendantInformation::class, 'destroy'])->name('pendant.destroy');
+        Route::get('/pendant-information', [PendantInformationController::class, 'index'])->name('pendant.index');
+        Route::post('/pendant-information', [PendantInformationController::class, 'store'])->name('pendant.store');
+        Route::get('/pendant-information/{id}', [PendantInformationController::class, 'show'])->name('pendant.show');
+        Route::put('/pendant-information/{id}', [PendantInformationController::class, 'update'])->name('pendant.update');
+        Route::delete('/pendant-information/{id}', [PendantInformationController::class, 'destroy'])->name('pendant.destroy');
 
         // Gem Info
-        Route::get('/gem-information/{id}', [GemInformationController::class, 'index'])->name('gem.index');
+        Route::get('/gem-information', [GemInformationController::class, 'index'])->name('gem.index'); // Disesuaikan, seharusnya ini untuk semua gem
         Route::post('/gem-information', [GemInformationController::class, 'store'])->name('gem.store');
-        Route::get('/gem-information', [GemInformationController::class, 'show'])->name('gem.show');
+        Route::get('/gem-information/{id}', [GemInformationController::class, 'show'])->name('gem.show'); // Disesuaikan, seharusnya ini untuk gem spesifik
         Route::put('/gem-information/{id}', [GemInformationController::class, 'update'])->name('gem.update');
         Route::delete('/gem-information/{id}', [GemInformationController::class, 'destroy'])->name('gem.destroy');
 
-        Route::get('/feature-disable/{id}', [FeaturesDisableController::class, 'index'])->name('featuresdisable.index');
+        // Features Disable
+        Route::get('/feature-disable', [FeaturesDisableController::class, 'index'])->name('featuresdisable.index'); // show and index were swapped for feature-disable
         Route::post('/feature-disable', [FeaturesDisableController::class, 'store'])->name('featuresdisable.store');
-        Route::get('/feature-disable', [FeaturesDisableController::class, 'show'])->name('featuresdisable.show');
+        Route::get('/feature-disable/{id}', [FeaturesDisableController::class, 'show'])->name('featuresdisable.show');
         Route::put('/feature-disable/{id}', [FeaturesDisableController::class, 'update'])->name('featuresdisable.update');
         Route::delete('/feature-disable/{id}', [FeaturesDisableController::class, 'destroy'])->name('featuresdisable.destroy');
 
-        // Gem Info
-        Route::get('/feature-enable/{id}', [FeaturesEnableController::class, 'index'])->name('featuresenable.index');
-        Route::post('/gem-information', [FeaturesEnableController::class, 'store'])->name('featuresenable.store');
-        Route::get('/gem-information', [FeaturesEnableController::class, 'show'])->name('featuresenable.show');
-        Route::put('/gem-information/{id}', [FeaturesEnableController::class, 'update'])->name('featuresenable.update');
-        Route::delete('/gem-information/{id}', [FeaturesEnableController::class, 'destroy'])->name('featuresenable.destroy');
+        // Features Enable
+        Route::get('/feature-enable', [FeaturesEnableController::class, 'index'])->name('featuresenable.index'); // Adjusted
+        Route::post('/feature-enable', [FeaturesEnableController::class, 'store'])->name('featuresenable.store'); // Corrected
+        Route::get('/feature-enable/{id}', [FeaturesEnableController::class, 'show'])->name('featuresenable.show'); // Adjusted
+        Route::put('/feature-enable/{id}', [FeaturesEnableController::class, 'update'])->name('featuresenable.update'); // Corrected
+        Route::delete('/feature-enable/{id}', [FeaturesEnableController::class, 'destroy'])->name('featuresenable.destroy'); // Corrected
 
         // NPC Info
         $npclist = [
@@ -86,9 +86,10 @@ Route::prefix('game-info')->name('game-info.')->group(function () {
 
         foreach ($npclist as $prefix => $controller) {
             Route::prefix($prefix)->name("$prefix.")->group(function () use ($controller) {
-                Route::get('/{id}', [$controller, 'index'])->name('index');
+                // Biasanya index tidak memiliki {id} dan show memilikinya
+                Route::get('/', [$controller, 'index'])->name('index'); // Untuk mengambil semua
                 Route::post('/', [$controller, 'store'])->name('store');
-                Route::get('/', [$controller, 'show'])->name('show');
+                Route::get('/{id}', [$controller, 'show'])->name('show'); // Untuk mengambil spesifik
                 Route::put('/{id}', [$controller, 'update'])->name('update');
                 Route::delete('/{id}', [$controller, 'destroy'])->name('destroy');
             });
@@ -108,9 +109,10 @@ Route::prefix('game-info')->name('game-info.')->group(function () {
 
         foreach ($droplist as $prefix => $controller) {
             Route::prefix($prefix)->name("$prefix.")->group(function () use ($controller) {
-                Route::get('/{id}', [$controller, 'index'])->name('index');
+                // Biasanya index tidak memiliki {id} dan show memilikinya
+                Route::get('/', [$controller, 'index'])->name('index'); // Untuk mengambil semua
                 Route::post('/', [$controller, 'store'])->name('store');
-                Route::get('/', [$controller, 'show'])->name('show');
+                Route::get('/{id}', [$controller, 'show'])->name('show'); // Untuk mengambil spesifik
                 Route::put('/{id}', [$controller, 'update'])->name('update');
                 Route::delete('/{id}', [$controller, 'destroy'])->name('destroy');
             });
@@ -134,9 +136,10 @@ Route::prefix('game-info')->name('game-info.')->group(function () {
 
         foreach ($quests as $prefix => $controller) {
             Route::prefix($prefix)->name("$prefix.")->group(function () use ($controller) {
-                Route::get('/{id}', [$controller, 'index'])->name('index');
+                // Biasanya index tidak memiliki {id} dan show memilikinya
+                Route::get('/', [$controller, 'index'])->name('index'); // Untuk mengambil semua
                 Route::post('/', [$controller, 'store'])->name('store');
-                Route::get('/', [$controller, 'show'])->name('show');
+                Route::get('/{id}', [$controller, 'show'])->name('show'); // Untuk mengambil spesifik
                 Route::put('/{id}', [$controller, 'update'])->name('update');
                 Route::delete('/{id}', [$controller, 'destroy'])->name('destroy');
             });

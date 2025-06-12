@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\GameInfo\ServerInformation\FeatureInformation;
 
 use App\Http\Controllers\Controller;
 use App\Models\GameInfo\ServerInfo\FeatureInfo\GemInformation;
@@ -26,7 +26,7 @@ class GemInformationController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'feature_information_id' => 'required|exists:feature_information,id',
+            'game_information_id' => 'required|exists:game_information_id,id',
             'image' => 'required|string',
             'name_item' => 'required|string',
             'type' => 'required|string',
@@ -42,7 +42,7 @@ class GemInformationController extends Controller
         $info = GemInformation::findOrFail($id);
 
         $validated = $request->validate([
-            'feature_information_id' => 'required|exists:feature_information,id',
+            'game_information_id' => 'required|exists:game_information_id,id',
             'image' => 'required|string',
             'name_item' => 'required|string',
             'type' => 'required|string',
