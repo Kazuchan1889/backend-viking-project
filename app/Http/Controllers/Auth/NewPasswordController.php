@@ -22,32 +22,33 @@ class NewPasswordController extends Controller
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'token' => ['required'],
             'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'pin' => ['required'],
+            'password' => ['required', 'confirmed', Rules\Password::min(8)
+                            ->mixedCase()
+                            ->letters()
+                            ->numbers()
+                            ->symbols(),
+                        'max:12',],
         ]);
 
         // Here we will attempt to reset the user's password. If it is successful we
         // will update the password on an actual user model and persist it to the
         // database. Otherwise we will parse the error and return the response.
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user) use ($request) {
-                $user->forceFill([
-                    'password' => Hash::make($request->string('password')),
-                    'remember_token' => Str::random(60),
-                ])->save();
+        $user = \App\Models\User::where('email', $request->email)->first();
 
-                event(new PasswordReset($user));
-            }
-        );
-
-        if ($status != Password::PASSWORD_RESET) {
+        if(!$user || !Hash::check($request->pin, $user->PIN)) {
             throw ValidationException::withMessages([
-                'email' => [__($status)],
+                'email' => ['The provided credentials do not match our records.'],
             ]);
         }
 
-        return response()->json(['status' => __($status)]);
+        $user->password = Hash::make($request->password);
+        $user->setRememberToken(Str::random(60));
+        $user->save();
+
+        event(new \Illuminate\Auth\Events\PasswordReset($user));
+
+        return response()->json(['status' => 'Password reset successful.']);
     }
 }

@@ -27,10 +27,14 @@ class RegisteredUserController extends Controller
             $validated = $request->validate([
                 'username' => ['required', 'string', 'max:255', 'unique:users,username'],
                 'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
-                'password' => ['required', 'confirmed', Rules\Password::defaults()],
+                'password' => ['required', 'confirmed', Rules\Password::min(8)
+                            ->mixedCase()
+                            ->letters()
+                            ->numbers()
+                            ->symbols(),
+                        'max:12',],
                 'PIN' => ['required', 'digits:6'],
-                // If 'is_admin' is to be accepted from the request, ensure it's here:
-                // 'is_admin' => ['boolean'] // 'required' might not be suitable for public registration
+                'role' => ['nullable', 'string', 'in:user,admin'],
             ]);
 
             $user = User::create([
@@ -43,12 +47,17 @@ class RegisteredUserController extends Controller
                 // Otherwise, it's safer to set a default (e.g., false) in your User model or database migration.
             ]);
 
+            $role = $validated['role'] ?? 'user'; // default: user
+            $user->assignRole($role);
+
             event(new Registered($user));
 
-            Auth::login($user);
+            Log::info('User created: ID ' . $user->id);
 
             // Create a Sanctum token for the new user
             $token = $user->createToken('api-token')->plainTextToken;
+
+            Auth::login($user);
 
             return response()->json([
                 'message' => 'Registration successful!',
@@ -80,7 +89,8 @@ class RegisteredUserController extends Controller
         } catch (Exception $e) {
             Log::error('General error during registration: ' . $e->getMessage());
             return response()->json([
-                'message' => 'An unexpected error occurred during registration. Please try again later.',
+                'message' => 'Something went wrong during registration',
+                'error' => $e->getMessage(),
             ], 500); // 500 Internal Server Error
         }
     }
