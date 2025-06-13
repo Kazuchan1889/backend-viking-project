@@ -1,24 +1,23 @@
 <?php
 
-namespace App\Models\Donation;
+namespace App\Models\Donation\ServiceDonation;
 
+use App\Models\Donation\DonationInformation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-class ServiceDonation extends Model
+class TabGemstone extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'donation_id', // foreign key
+        'donation_informations_id', // foreign key
         'title',
         'description',
         'pricing',
-        'timestamps',
     ];
 
     public function donation()
     {
-        return $this->belongsTo(Donation::class);
+        return $this->belongsTo(DonationInformation::class);
     }
 }

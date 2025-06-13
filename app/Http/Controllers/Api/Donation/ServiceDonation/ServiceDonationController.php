@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api\Donation;
+namespace App\Http\Controllers\Api\Donation\ServiceDonation;
 
 use App\Http\Controllers\Controller;
-use App\Models\Donation\RetailDonation;
+use App\Models\Donation\ServiceDonation\ServiceDonation;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse; // Penting: Import ini untuk type hinting
 
-class RetailDonationController extends Controller
+class ServiceDonationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class RetailDonationController extends Controller
     public function index(): JsonResponse
     {
         // Ubah $droplists menjadi $retailDonations untuk konsistensi dengan nama model
-        $retailDonations = RetailDonation::all();
-        return response()->json($retailDonations);
+        $serviceDonations = ServiceDonation::all();
+        return response()->json($serviceDonations);
     }
 
     /**
@@ -26,8 +26,8 @@ class RetailDonationController extends Controller
     {
         // Gunakan findOrFail() untuk penanganan 404 yang lebih ringkas.
         // Laravel secara otomatis akan mengembalikan 404 jika ID tidak ditemukan.
-        $retailDonation = RetailDonation::findOrFail($id);
-        return response()->json($retailDonation);
+        $serviceDonations = ServiceDonation::findOrFail($id);
+        return response()->json($serviceDonations);
     }
 
     /**
@@ -36,7 +36,6 @@ class RetailDonationController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            // Pastikan 'game_information_id' benar-benar nama kolom di tabel game_informations
             'donation_informations_id' => 'required|exists:donation_informations,id',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -44,8 +43,8 @@ class RetailDonationController extends Controller
         ]);
 
         // Ubah $droplist menjadi $retailDonation untuk konsistensi
-        $retailDonation = RetailDonation::create($validated);
-        return response()->json($retailDonation, 201); // Mengembalikan status 201 Created
+        $serviceDonations = ServiceDonation::create($validated);
+        return response()->json($serviceDonations, 201); // Mengembalikan status 201 Created
     }
 
     /**
@@ -53,7 +52,7 @@ class RetailDonationController extends Controller
      */
     public function update(Request $request, $id): JsonResponse
     {
-        $retailDonation = RetailDonation::findOrFail($id); // Gunakan findOrFail()
+        $serviceDonations = ServiceDonation::findOrFail($id); // Gunakan findOrFail()
 
         $validated = $request->validate([
             'donation_informations_id' => 'required|exists:donation_informations,id',
@@ -62,8 +61,8 @@ class RetailDonationController extends Controller
             'pricing' => 'required|string',
         ]);
 
-        $retailDonation->update($validated);
-        return response()->json($retailDonation);
+        $serviceDonations->update($validated);
+        return response()->json($serviceDonations);
     }
 
     /**
@@ -71,8 +70,8 @@ class RetailDonationController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $retailDonation = RetailDonation::findOrFail($id); // Gunakan findOrFail()
-        $retailDonation->delete();
+        $serviceDonations = ServiceDonation::findOrFail($id); // Gunakan findOrFail()
+        $serviceDonations->delete();
 
         return response()->json(['message' => 'Deleted successfully']);
     }

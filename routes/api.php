@@ -1,7 +1,8 @@
 <?php
+
 use App\Http\Controllers\Api\GameInfo\ServerInformation\FeatureInformation\PendantInformationController;
 use App\Http\Controllers\Api\GameInfo\ServerInformation\FeatureInformation\GemInformationController;
-use App\Http\Controllers\Api\GameInfo\ServerInformation\GeneralInformation\FeaturesInformation\FeaturesDisableController; 
+use App\Http\Controllers\Api\GameInfo\ServerInformation\GeneralInformation\FeaturesInformation\FeaturesDisableController;
 use App\Http\Controllers\Api\GameInfo\ServerInformation\GeneralInformation\FeaturesInformation\FeaturesEnableController;
 use App\Http\Controllers\Api\GameInfo\ServerInformation\NPCListInformation\RaceHqNpcController;
 use App\Http\Controllers\Api\GameInfo\ServerInformation\NPCListInformation\ElanPlateauNpcController;
@@ -22,89 +23,64 @@ use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestSundayControlle
 use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestSaturdayController;
 use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestFridayController;
 use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestThursdayController;
-
-
+use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestWednesdayController;
+use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestTuesdayController;
+use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestMondayController;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Api\ServerRulesController;
-use App\Http\Controllers\Api\MapInformationController;
-use App\Http\Controllers\Api\DonationController;
+use App\Http\Controllers\Api\GameInfo\ServerRulesController;
+use App\Http\Controllers\Api\GameInfo\MapInformationController;
+use App\Http\Controllers\Api\Donation\DonationInformationController;
 use App\Http\Controllers\Api\GameInfo\GameInformationController;
 use App\Http\Controllers\Api\Donation\RetailDonationController;
-use App\Http\Controllers\Api\Donation\ServiceDonationController;
+use App\Http\Controllers\Api\Donation\ServiceDonation\ServiceDonationController;
+use App\Http\Controllers\Api\Donation\ServiceDonation\TabResourcesController;
+use App\Http\Controllers\Api\Donation\ServiceDonation\TabGemstoneController;
+
 use App\Http\Controllers\Api\Donation\SeassonPassDonationController;
 use App\Http\Controllers\Api\Donation\PackageDonationController;
 use App\Http\Controllers\Api\Donation\HowToDonationController;
 
 
-
+// =======================
+// Game Info Routes
+// Prefix all routes in this group with 'game-info'
+// =======================
 Route::prefix('game-info')->name('game-info.')->group(function () {
 
-    // --------------------
     // Game Information (General) - CRUD for game_informations table
-    // PERBAIKAN: Mengubah prefix dari 'general-information' menjadi 'game-data'
-    // --------------------
-    Route::prefix('game-data')->name('game-data.')->group(function () {
-        Route::get('/', [GameInformationController::class, 'index'])->name('index');
-        Route::post('/', [GameInformationController::class, 'store'])->name('store');
-        Route::get('/{id}', [GameInformationController::class, 'show'])->name('show');
-        Route::put('/{id}', [GameInformationController::class, 'update'])->name('update');
-        Route::delete('/{id}', [GameInformationController::class, 'destroy'])->name('destroy');
-    });
+    // URL: /api/game-info/game-data
+    Route::apiResource('game-data', GameInformationController::class);
 
-    // --------------------
-    // Server Information
-    // --------------------
+    // Server Information - Grouping various server-related data
     Route::prefix('server-information')->name('server-information.')->group(function () {
 
-        // Pendant Info
-        Route::get('/pendant-information', [PendantInformationController::class, 'index'])->name('pendant.index');
-        Route::post('/pendant-information', [PendantInformationController::class, 'store'])->name('pendant.store');
-        Route::get('/pendant-information/{id}', [PendantInformationController::class, 'show'])->name('pendant.show');
-        Route::put('/pendant-information/{id}', [PendantInformationController::class, 'update'])->name('pendant.update');
-        Route::delete('/pendant-information/{id}', [PendantInformationController::class, 'destroy'])->name('pendant.destroy');
+        // Feature Information
+        // URL: /api/game-info/server-information/pendant-information
+        Route::apiResource('pendant-information', PendantInformationController::class)->names('pendant-information');
+        // URL: /api/game-info/server-information/gem-information
+        Route::apiResource('gem-information', GemInformationController::class)->names('gem-information');
 
-        // Gem Info
-        Route::get('/gem-information', [GemInformationController::class, 'index'])->name('gem.index');
-        Route::post('/gem-information', [GemInformationController::class, 'store'])->name('gem.store');
-        Route::get('/gem-information/{id}', [GemInformationController::class, 'show'])->name('gem.show');
-        Route::put('/gem-information/{id}', [GemInformationController::class, 'update'])->name('gem.update');
-        Route::delete('/gem-information/{id}', [GemInformationController::class, 'destroy'])->name('gem.destroy');
+        // General Information Features (Disable/Enable)
+        // URL: /api/game-info/server-information/feature-disable
+        Route::apiResource('feature-disable', FeaturesDisableController::class)->names('feature-disable');
+        // URL: /api/game-info/server-information/feature-enable
+        Route::apiResource('feature-enable', FeaturesEnableController::class)->names('feature-enable');
 
-        // Features Disable
-        Route::get('/feature-disable', [FeaturesDisableController::class, 'index'])->name('featuresdisable.index');
-        Route::post('/feature-disable', [FeaturesDisableController::class, 'store'])->name('featuresdisable.store');
-        Route::get('/feature-disable/{id}', [FeaturesDisableController::class, 'show'])->name('featuresdisable.show');
-        Route::put('/feature-disable/{id}', [FeaturesDisableController::class, 'update'])->name('featuresdisable.update');
-        Route::delete('/feature-disable/{id}', [FeaturesDisableController::class, 'destroy'])->name('featuresdisable.destroy');
-
-        // Features Enable
-        Route::get('/feature-enable', [FeaturesEnableController::class, 'index'])->name('featuresenable.index');
-        Route::post('/feature-enable', [FeaturesEnableController::class, 'store'])->name('featuresenable.store');
-        Route::get('/feature-enable/{id}', [FeaturesEnableController::class, 'show'])->name('featuresenable.show');
-        Route::put('/feature-enable/{id}', [FeaturesEnableController::class, 'update'])->name('featuresenable.update');
-        Route::delete('/feature-enable/{id}', [FeaturesEnableController::class, 'destroy'])->name('featuresenable.destroy');
-
-        // NPC Info
+        // NPC List Information
         $NPCList = [
             'elanplateaunpc' => ElanPlateauNpcController::class,
             'racehqnpc' => RaceHqNpcController::class,
             'settedessertnpc' => SetteDessertNpcController::class,
             'volcaniccauldronnpc' => VolcanicCauldronNpcController::class,
         ];
-
         foreach ($NPCList as $prefix => $controller) {
-            Route::prefix($prefix)->name("$prefix.")->group(function () use ($controller) {
-                Route::get('/', [$controller, 'index'])->name('index');
-                Route::post('/', [$controller, 'store'])->name('store');
-                Route::get('/{id}', [$controller, 'show'])->name('show');
-                Route::put('/{id}', [$controller, 'update'])->name('update');
-                Route::delete('/{id}', [$controller, 'destroy'])->name('destroy');
-            });
+            // URL: /api/game-info/server-information/{prefix} (e.g., /elanplateaunpc)
+            Route::apiResource($prefix, $controller)->names($prefix);
         }
 
-        // Drop List Info
+        // Drop List Information
         $droplist = [
             'droponhq' => DropOnHqController::class,
             'elanplateau' => ElanPlateauController::class,
@@ -116,99 +92,81 @@ Route::prefix('game-info')->name('game-info.')->group(function () {
             'cragmine' => CragmineController::class,
             'volcaniccauldron' => VolcanicCauldronController::class,
         ];
-
         foreach ($droplist as $prefix => $controller) {
-            Route::prefix($prefix)->name("$prefix.")->group(function () use ($controller) {
-                Route::get('/', [$controller, 'index'])->name('index');
-                Route::post('/', action: [$controller, 'store'])->name('store');
-                Route::get('/{id}', [$controller, 'show'])->name('show');
-                Route::put('/{id}', [$controller, 'update'])->name('update');
-                Route::delete('/{id}', [$controller, 'destroy'])->name('destroy');
-            });
+            // URL: /api/game-info/server-information/{prefix} (e.g., /droponhq)
+            Route::apiResource($prefix, $controller)->names($prefix);
         }
-    });
+    }); // End of server-information group
 
 
-    // --------------------
     // Quest Information
-    // --------------------
     Route::prefix('quest-information')->name('quest-information.')->group(function () {
         $quests = [
             'dailyquestafterwar' => DailyQuestAfterWarController::class,
-            'dailyquesttuesday' => DailyQuestTuesday::class,
-            'dailyquestwednesday' => DailyQuestWednesday::class,
+            'dailyquesttuesday' => DailyQuestTuesdayController::class,
+            'dailyquestwednesday' => DailyQuestWednesdayController::class,
             'dailyquestthursday' => DailyQuestThursdayController::class,
             'dailyquestfriday' => DailyQuestFridayController::class,
             'dailyquestsaturday' => DailyQuestSaturdayController::class,
             'dailyquestsunday' => DailyQuestSundayController::class,
+            'dailyquestmonday' => DailyQuestMondayController::class,
         ];
-
         foreach ($quests as $prefix => $controller) {
-            Route::prefix($prefix)->name("$prefix.")->group(function () use ($controller) {
-                Route::get('/', [$controller, 'index'])->name('index');
-                Route::post('/', [$controller, 'store'])->name('store');
-                Route::get('/{id}', [$controller, 'show'])->name('show');
-                Route::put('/{id}', [$controller, 'update'])->name('update');
-                Route::delete('/{id}', [$controller, 'destroy'])->name('destroy');
-            });
+            // URL: /api/game-info/quest-information/{prefix} (e.g., /dailyquestafterwar)
+            Route::apiResource($prefix, $controller)->names($prefix);
         }
-    });
+    }); // End of quest-information group
 
-    // --------------------
+
     // Server Rules
-    // --------------------
-    Route::prefix('server-rules')->name('server-rules.')->group(function () {
-        Route::get('/', [ServerRulesController::class, 'index'])->name('index');
-        Route::post('/', [ServerRulesController::class, 'store'])->name('store');
-        Route::get('/{id}', [ServerRulesController::class, 'show'])->name('show');
-        Route::put('/{id}', [ServerRulesController::class, 'update'])->name('update');
-        Route::delete('/{id}', [ServerRulesController::class, 'destroy'])->name('destroy');
-    });
+    // URL: /api/game-info/server-rules
+    Route::apiResource('server-rules', ServerRulesController::class)->names('server-rules');
 
-    // --------------------
+
     // Map Information
-    // --------------------
     Route::prefix('mapinfo')->name('mapinfo.')->group(function () {
-        Route::get('/', [MapInformationController::class, 'index'])->name('index');
-        Route::post('/', [MapInformationController::class, 'store'])->name('store');
-        Route::get('/{id}', [MapInformationController::class, 'show'])->name('show');
-        Route::put('/{id}', [MapInformationController::class, 'update'])->name('update');
-        Route::delete('/{id}', [MapInformationController::class, 'destroy'])->name('destroy');
-    });
-});
+        // Custom route for map data by number
+        // URL: /api/game-info/mapinfo/by-number/{mapNumber}
+        Route::get('by-number/{mapNumber}', [MapInformationController::class, 'getMapDataByNumber'])->name('by-number');
+
+        // Standard CRUD for Map Information
+        // URL: /api/game-info/mapinfo (for index, store)
+        // URL: /api/game-info/mapinfo/{mapinfo} (for show, update, destroy)
+        Route::apiResource('/', MapInformationController::class)->except(['create', 'edit'])->parameters(['' => 'mapinfo']);
+    }); // End of mapinfo group
+
+}); // End of game-info group
 
 // =======================
 // Main Donation Routes
+// Prefix all routes in this group with 'donation'
 // =======================
-$donationRoutes = [
-    'retail-donation' => RetailDonationController::class,
-    'service-donation' => ServiceDonationController::class,
-    'seassonpass-donation' => SeassonPassDonationController::class,
-    'package-donation' => PackageDonationController::class,
-    'howto-donation' => HowToDonationController::class,
-];
+Route::prefix('donation')->name('donation.')->group(function () {
 
-Route::prefix('donations')->name('donations.')->group(function () use ($donationRoutes) {
-    Route::get('/', [DonationController::class, 'index'])->name('index');
-    Route::post('/', [DonationController::class, 'store'])->name('store');
-    Route::get('/{id}', [DonationController::class, 'show'])->name('show');
-    Route::put('/{id}', [DonationController::class, 'update'])->name('update');
-    Route::delete('/{id}', [DonationController::class, 'destroy'])->name('destroy');
+    Route::apiResource('donation-info', DonationInformationController::class)->names('donation-info');
+    Route::prefix('service')->name('service.')->group(function () {
+        // HAPUS BARIS INI ATAU KOMENTARI! Ini adalah penyebab konflik rute.
+        // Route::apiResource('/', ServiceDonationController::class)->except(['create', 'edit'])->parameters(['' => 'service']);
 
-    foreach ($donationRoutes as $prefix => $controller) {
-        Route::prefix($prefix)->name("$prefix.")->group(function () use ($controller) {
-            Route::get('/', [$controller, 'index'])->name('index');
-            Route::post('/', [$controller, 'store'])->name('store');
-            Route::get('/{id}', [$controller, 'show'])->name('show');
-            Route::put('/{id}', [$controller, 'update'])->name('update');
-            Route::delete('/{id}', [$controller, 'destroy'])->name('destroy');
-        });
+        Route::apiResource('gemstone', TabGemstoneController::class)->names('gemstone');
+        Route::apiResource('resources', TabResourcesController::class)->names('resources');
+        Route::apiResource('services', ServiceDonationController::class)->names('services'); // Ini adalah rute yang ingin Anda gunakan untuk daftar ServiceDonation
+    });
+    $otherDonationTypes = [
+        'retail' => RetailDonationController::class,
+        'seassonpass' => SeassonPassDonationController::class,
+        'package' => PackageDonationController::class,
+        'howto' => HowToDonationController::class,
+    ];
+
+    foreach ($otherDonationTypes as $prefix => $controller) {
+        // URL: /api/donation/{prefix} (e.g., /retail, /seassonpass)
+        Route::apiResource($prefix, $controller)->names($prefix);
     }
-});
 
-// =======================
-// Authentication Routes
-// =======================
+}); // End of main donation group
+
+
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 Route::middleware('auth:sanctum')->get('/logout', [AuthenticatedSessionController::class, 'destroy']);
 

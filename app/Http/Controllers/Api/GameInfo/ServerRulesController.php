@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\GameInfo;
 
 use App\Http\Controllers\Controller;
 use App\Models\GameInfo\ServerRules;
@@ -10,49 +10,49 @@ class ServerRulesController extends Controller
 {
     public function index()
     {
-        $info = ServerRules::all();
-        return response()->json($info);
+        $servers = ServerRules::all();
+        return response()->json($servers);
     }
 
     public function show($id)
     {
-        $info = ServerRules::find($id);
-        if (!$info) {
-            return response()->json(['message' => 'description is not found'], 404);
+        $server = ServerRules::find($id);
+        if (!$server) {
+            return response()->json(['message' => 'Server is not found'], 404);
         }
-        return response()->json($info);
+        return response()->json($server);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'game_info_id' => 'required|exists:game_info,id',
-            'title' => 'required|string',
+            'game_information_id' => 'required|exists:game_informations,id',
+            'title' => 'required|string|max:255',     // lowercase key untuk konsistensi
             'description' => 'required|string',
         ]);
 
-        $info = ServerRules::create($validated);
-        return response()->json($info, 201);
+        $server= ServerRules::create($validated);
+        return response()->json($server, 201);
     }
 
     public function update(Request $request, $id)
     {
-        $info = ServerRules::findOrFail($id);
+        $server = ServerRules::findOrFail($id);
 
         $validated = $request->validate([
-            'game_info_id' => 'required|exists:game_info,id',
-            'title' => 'required|string',
+            'game_information_id' => 'required|exists:game_informations,id',
+            'title' => 'required|string|max:255',
             'description' => 'required|string',
         ]);
 
-        $info->update($validated);
-        return response()->json($info);
+        $server->update($validated);
+        return response()->json($server);
     }
 
     public function destroy($id)
     {
-        $info = ServerRules::findOrFail($id);
-        $info->delete();
+        $server = ServerRules::findOrFail($id);
+        $server->delete();
 
         return response()->json(['message' => 'Deleted successfully']);
     }

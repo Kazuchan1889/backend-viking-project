@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('daily_quest_wednesday', function (Blueprint $table) {
+        Schema::create('map_informations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('game_information_id')->constrained('game_informations')->onDelete('cascade');
-            $table->string('image')->nullable();
-            $table->string('tutorial');
-            $table->string('quest');
-            $table->string('reward');
+            $table->string('map_number')->after('game_information_id'); // Kolom map_number (misalnya '1', '2', '3')
+            $table->string(column: 'location_name');
+            $table->text(column: 'image')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('daily_quest_wednesday');
+        Schema::dropIfExists('map_informations');
     }
 };

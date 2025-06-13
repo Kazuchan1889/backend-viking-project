@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('daily_quest_tuesday', function (Blueprint $table) {
+        Schema::create('service_donations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('game_information_id')->constrained('game_informations')->onDelete('cascade');
-            $table->string('image')->nullable();
-            $table->string('tutorial');
-            $table->string('quest');
-            $table->string('reward');
+            $table->foreignId(column: 'donation_informations_id')->constrained('donation_informations')->onDelete('cascade');
+            $table->string(column: 'title');
+            $table->text('description')->nullable();
+            $table->text('pricing')->nullable();
             $table->timestamps();
+
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('daily_quest_tuesday');
+        Schema::dropIfExists('service_donations');
     }
 };

@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('retail_donations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId(column: 'donation_id')->constrained('donations')->onDelete('cascade');
+            $table->foreignId(column: 'donation_informations_id')->constrained('donation_informations')->onDelete('cascade');
             $table->string(column: 'title');
             $table->text('description')->nullable();
-            $table->integer('pricing')->nullable();
+            $table->text('pricing')->nullable();
             $table->timestamps();
 
         });

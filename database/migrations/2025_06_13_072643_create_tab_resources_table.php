@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('service_donations', function (Blueprint $table) {
+        Schema::create('tab_resources', function (Blueprint $table) {
             $table->id();
-            $table->foreignId(column: 'donation_id')->constrained('donations')->onDelete('cascade');
+            $table->foreignId(column: 'donation_informations_id')->constrained('donation_informations')->onDelete('cascade');
             $table->string(column: 'title');
             $table->text('description')->nullable();
-            $table->integer('pricing')->nullable();
+            $table->text('pricing')->nullable();
             $table->timestamps();
 
         });
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('service_donations');
+        Schema::dropIfExists('tab_resources');
     }
 };

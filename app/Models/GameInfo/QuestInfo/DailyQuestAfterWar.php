@@ -28,7 +28,7 @@ class DailyQuestAfterWar extends Model
         'daily_quest',
         'map',
         'quest',
-        'rewards',
+        'reward',
     ];
 
     /**
