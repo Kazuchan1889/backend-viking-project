@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation;
 
 use App\Http\Controllers\Controller;
 use App\Models\GameInfo\ServerInfo\DropList\ElfLand;
@@ -10,49 +10,49 @@ class ElfLandController extends Controller
 {
     public function index()
     {
-        $npcs = ElfLand::all();
-        return response()->json($npcs);
+        $droplists = ElfLand::all();
+        return response()->json($droplists);
     }
 
     public function show($id)
     {
-        $npc = ElfLand::find($id);
-        if (!$npc) {
-            return response()->json(['message' => 'description is not found'], 404);
+        $droplist = ElfLand::find($id);
+        if (!$droplist) {
+            return response()->json(['message' => 'DropList is not found'], 404);
         }
-        return response()->json($npc);
+        return response()->json($droplist);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'game_information_id' => 'required|exists:game_infos,id',
+            'game_information_id' => 'required|exists:game_informations,id',
             'title' => 'required|string|max:255',     // lowercase key untuk konsistensi
             'description' => 'required|string',
         ]);
 
-        $npc = ElfLand::create($validated);
-        return response()->json($npc, 201);
+        $droplist = ElfLand::create($validated);
+        return response()->json($droplist, 201);
     }
 
     public function update(Request $request, $id)
     {
-        $npc = ElfLand::findOrFail($id);
+        $droplist = ElfLand::findOrFail($id);
 
         $validated = $request->validate([
-            'game_information_id' => 'required|exists:game_infos,id',
+            'game_information_id' => 'required|exists:game_informations,id',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
         ]);
 
-        $npc->update($validated);
-        return response()->json($npc);
+        $droplist->update($validated);
+        return response()->json($droplist);
     }
 
     public function destroy($id)
     {
-        $npc = ElfLand::findOrFail($id);
-        $npc->delete();
+        $droplist = ElfLand::findOrFail($id);
+        $droplist->delete();
 
         return response()->json(['message' => 'Deleted successfully']);
     }

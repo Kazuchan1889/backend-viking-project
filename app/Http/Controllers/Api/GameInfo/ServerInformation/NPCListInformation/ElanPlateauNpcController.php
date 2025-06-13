@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\GameInfo\ServerInformation\NPCListInformation;
 
 use App\Http\Controllers\Controller;
 use App\Models\GameInfo\ServerInfo\NPCList\ElanPlateauNpc;
@@ -26,7 +26,7 @@ class ElanPlateauNpcController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'game_information_id' => 'required|exists:game_infos,id',
+            'game_information_id' => 'required|exists:game_informations,id',
             'npc' => 'required|string|max:255',     // lowercase key untuk konsistensi
             'buy_with' => 'required|string',
         ]);
@@ -40,7 +40,7 @@ class ElanPlateauNpcController extends Controller
         $npc = ElanPlateauNpc::findOrFail($id);
 
         $validated = $request->validate([
-            'game_information_id' => 'required|exists:game_infos,id',
+            'game_information_id' => 'required|exists:game_informations,id',
             'npc' => 'required|string|max:255',
             'buy_with' => 'required|string',
         ]);

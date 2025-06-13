@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('daily_quest_mondays', function (Blueprint $table) {
+        Schema::create('daily_quest_monday', function (Blueprint $table) {
             $table->id();
             $table->foreignId('game_information_id')->constrained('game_informations')->onDelete('cascade');
             $table->string('image')->nullable();
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('daily_quest_mondays');
+        Schema::dropIfExists('daily_quest_monday');
     }
 };

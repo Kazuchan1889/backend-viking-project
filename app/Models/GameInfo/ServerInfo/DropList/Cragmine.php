@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory; 
 use App\Models\GameInfo\GameInformation; 
 
-class SetteDesert extends Model
+class Cragmine extends Model
 {
     use HasFactory; 
 
@@ -15,7 +15,7 @@ class SetteDesert extends Model
      *
      * @var string
      */
-    protected $table = 'sette_desert'; 
+    protected $table = 'cragmine'; 
     /**
      * The attributes that are mass assignable.
      *

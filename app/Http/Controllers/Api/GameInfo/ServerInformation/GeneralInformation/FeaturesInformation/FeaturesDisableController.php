@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\GameInfo\ServerInfo\GeneralInfo\FeaturesInfo;
+namespace App\Http\Controllers\Api\GameInfo\ServerInformation\GeneralInformation\FeaturesInformation;
 
 use App\Http\Controllers\Controller;
 use App\Models\GameInfo\ServerInfo\GeneralInfo\FeaturesInfo\FeaturesDisable;
@@ -29,7 +29,8 @@ class FeaturesDisableController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'general_information_id' => 'required|exists:general_informations,id',
+            // PERBAIKAN: Mengubah 'general_informations' menjadi 'game_informations'
+            'game_information_id' => 'required|exists:game_informations,id',
             'title' => 'required|string',
             'description' => 'required|string',
         ]);
@@ -44,7 +45,8 @@ class FeaturesDisableController extends Controller
         $feature = FeaturesDisable::findOrFail($id);
 
         $validated = $request->validate([
-            'general_information_id' => 'required|exists:general_informations,id',
+            // PERBAIKAN: Mengubah 'general_informations' menjadi 'game_informations'
+            'game_information_id' => 'required|exists:game_informations,id',
             'title' => 'required|string',
             'description' => 'required|string',
         ]);

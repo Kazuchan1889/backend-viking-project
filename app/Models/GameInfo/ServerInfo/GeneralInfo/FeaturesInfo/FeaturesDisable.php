@@ -11,6 +11,7 @@ class FeaturesDisable extends Model
     use HasFactory;
 
     protected $fillable = [
+        'game_information_id',
         'title',
         'description',
     ];

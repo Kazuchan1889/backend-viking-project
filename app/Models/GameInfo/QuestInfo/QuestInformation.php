@@ -21,37 +21,37 @@ class QuestInformation extends Model
     protected $fillable = ['title'];
 
     // Relasi ke masing-masing harian
-    public function dailyQuestAfterWar()
+    public function dailyquestafterwar()
     {
         return $this->hasMany(DailyQuestAfterWar::class);
     }
 
-    public function dailyQuestFriday()
+    public function dailyquestfriday()
     {
         return $this->hasMany(DailyQuestFriday::class);
     }
 
-    public function dailyQuestSaturday()
+    public function dailyquestsaturday()
     {
         return $this->hasMany(DailyQuestSaturday::class);
     }
 
-    public function dailyQuestSunday()
+    public function dailyquestsunday()
     {
         return $this->hasMany(DailyQuestSunday::class);
     }
 
-    public function dailyQuestThursday()
+    public function dailyquestthursday()
     {
         return $this->hasMany(DailyQuestThursday::class);
     }
 
-    public function dailyQuestTuesday()
+    public function dailyquesttuesday()
     {
         return $this->hasMany(DailyQuestTuesday::class);
     }
 
-    public function dailyQuestWednesday()
+    public function dailyquestwednesday()
     {
         return $this->hasMany(DailyQuestWednesday::class);
     }

@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\GameInfo\QuestInformation;
 
 use App\Http\Controllers\Controller;
 use App\Models\GameInfo\QuestInfo\DailyQuestFriday;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 
 class DailyQuestFridayController extends Controller
 {
@@ -26,7 +28,8 @@ class DailyQuestFridayController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'image' => 'required|string',
+            'game_information_id' => 'required|exists:game_informations,id',
+            'image' => 'required|file|image|mimes:jpg,jpeg,png|max:2048',
             'tutorial' => 'required|string',
             'quest' => 'required|string',
             'reward' => 'required|string',
@@ -41,11 +44,24 @@ class DailyQuestFridayController extends Controller
         $info = DailyQuestFriday::findOrFail($id);
 
         $validated = $request->validate([
-            'image' => 'required|string',
+            'game_information_id' => 'required|exists:game_informations,id',
+            'image' => 'required|file|image|mimes:jpg,jpeg,png|max:2048',
             'tutorial' => 'required|string',
             'quest' => 'required|string',
             'reward' => 'required|string',
         ]);
+
+        // Simpan gambar baru jika diupload
+        if ($request->hasFile('image')) {
+            // Hapus file lama jika perlu
+            if ($info->image && Storage::exists('public/dailyquestfriday/' . $info->image)) {
+                Storage::delete('public/dailyquestfriday/' . $info->image);
+            }
+
+            $filename = time() . '_' . $request->file('image')->getClientOriginalName();
+            $path = $request->file('image')->storeAs('public/dailyquestfriday', $filename);
+            $validated['image'] = $filename;
+        }
 
         $info->update($validated);
         return response()->json($info);
@@ -54,8 +70,14 @@ class DailyQuestFridayController extends Controller
     public function destroy($id)
     {
         $info = DailyQuestFriday::findOrFail($id);
-        $info->delete();
 
+        // Hapus file image jika ada
+        if ($info->image && Storage::exists('public/dailyquestfriday/' . $info->image)) {
+            Storage::delete('public/dailyquestfriday/' . $info->image);
+        }
+
+        $info->delete();
         return response()->json(['message' => 'Deleted successfully']);
     }
 }
+

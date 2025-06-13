@@ -15,7 +15,7 @@ class GameInformationSeeder extends Seeder
     {
         DB::table('game_informations')->insert([ // Perhatikan 'game_informations'
             'id' => 1, // Pastikan ada ID 1
-            'name' => 'Default Game Info', // Sesuaikan dengan kolom 'name' Anda
+            'name' => 'PendantInformation', // Sesuaikan dengan kolom 'name' Anda
             'created_at' => now(),
             'updated_at' => now(),
         ]);

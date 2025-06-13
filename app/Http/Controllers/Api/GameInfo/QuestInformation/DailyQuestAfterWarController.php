@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\GameInfo\QuestInformation;
 
-use App\Models\GameInfo\QuestInfo\DailyQuestAfterWar;
 use App\Http\Controllers\Controller;
+use App\Models\GameInfo\QuestInfo\DailyQuestAfterWar;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 
 class DailyQuestAfterWarController extends Controller
 {
@@ -26,7 +28,9 @@ class DailyQuestAfterWarController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'image' => 'required|string',
+            'game_information_id' => 'required|exists:game_informations,id',
+            'category' => 'required|string',
+            'image' => 'required|file|image|mimes:jpg,jpeg,png|max:2048',
             'daily_quest' => 'required|string',
             'map' => 'required|string',
             'quest' => 'required|string',
@@ -42,12 +46,26 @@ class DailyQuestAfterWarController extends Controller
         $info = DailyQuestAfterWar::findOrFail($id);
 
         $validated = $request->validate([
-            'image' => 'required|string',
+            'game_information_id' => 'required|exists:game_informations,id',
+            'category' => 'required|string',
+            'image' => 'required|file|image|mimes:jpg,jpeg,png|max:2048',
             'daily_quest' => 'required|string',
             'map' => 'required|string',
             'quest' => 'required|string',
             'reward' => 'required|string',
         ]);
+
+        // Simpan gambar baru jika diupload
+        if ($request->hasFile('image')) {
+            // Hapus file lama jika perlu
+            if ($info->image && Storage::exists('public/dailyquestafterwar/' . $info->image)) {
+                Storage::delete('public/dailyquestafterwar/' . $info->image);
+            }
+
+            $filename = time() . '_' . $request->file('image')->getClientOriginalName();
+            $path = $request->file('image')->storeAs('public/dailyquestafterwar', $filename);
+            $validated['image'] = $filename;
+        }
 
         $info->update($validated);
         return response()->json($info);
@@ -56,8 +74,14 @@ class DailyQuestAfterWarController extends Controller
     public function destroy($id)
     {
         $info = DailyQuestAfterWar::findOrFail($id);
-        $info->delete();
 
+        // Hapus file image jika ada
+        if ($info->image && Storage::exists('public/dailyquestafterwar/' . $info->image)) {
+            Storage::delete('public/dailyquestafterwar/' . $info->image);
+        }
+
+        $info->delete();
         return response()->json(['message' => 'Deleted successfully']);
     }
 }
+

@@ -3,20 +3,20 @@
 namespace App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation;
 
 use App\Http\Controllers\Controller;
-use App\Models\GameInfo\ServerInfo\DropList\ElanPlateau;
+use App\Models\GameInfo\ServerInfo\DropList\Cragmine;
 use Illuminate\Http\Request;
 
-class ElanPlateauController extends Controller
+class CragmineController extends Controller
 {
     public function index()
     {
-        $droplists = ElanPlateau::all();
+        $droplists = Cragmine::all();
         return response()->json($droplists);
     }
 
     public function show($id)
     {
-        $droplist = ElanPlateau::find($id);
+        $droplist = Cragmine::find($id);
         if (!$droplist) {
             return response()->json(['message' => 'DropList is not found'], 404);
         }
@@ -31,13 +31,13 @@ class ElanPlateauController extends Controller
             'description' => 'required|string',
         ]);
 
-        $droplist = ElanPlateau::create($validated);
+        $droplist = Cragmine::create($validated);
         return response()->json($droplist, 201);
     }
 
     public function update(Request $request, $id)
     {
-        $droplist = ElanPlateau::findOrFail($id);
+        $droplist = Cragmine::findOrFail($id);
 
         $validated = $request->validate([
             'game_information_id' => 'required|exists:game_informations,id',
@@ -51,7 +51,7 @@ class ElanPlateauController extends Controller
 
     public function destroy($id)
     {
-        $droplist = ElanPlateau::findOrFail($id);
+        $droplist = Cragmine::findOrFail($id);
         $droplist->delete();
 
         return response()->json(['message' => 'Deleted successfully']);

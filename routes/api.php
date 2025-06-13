@@ -1,47 +1,57 @@
 <?php
 use App\Http\Controllers\Api\GameInfo\ServerInformation\FeatureInformation\PendantInformationController;
 use App\Http\Controllers\Api\GameInfo\ServerInformation\FeatureInformation\GemInformationController;
+use App\Http\Controllers\Api\GameInfo\ServerInformation\GeneralInformation\FeaturesInformation\FeaturesDisableController; 
+use App\Http\Controllers\Api\GameInfo\ServerInformation\GeneralInformation\FeaturesInformation\FeaturesEnableController;
+use App\Http\Controllers\Api\GameInfo\ServerInformation\NPCListInformation\RaceHqNpcController;
+use App\Http\Controllers\Api\GameInfo\ServerInformation\NPCListInformation\ElanPlateauNpcController;
+use App\Http\Controllers\Api\GameInfo\ServerInformation\NPCListInformation\SetteDessertNpcController;
+use App\Http\Controllers\Api\GameInfo\ServerInformation\NPCListInformation\VolcanicCauldronNpcController;
+use App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation\DropOnHqController;
+use App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation\ElanPlateauController;
+use App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation\VolcanicCauldronController;
+use App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation\OutcastLandController;
+use App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation\SetteDesertController;
+use App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation\EtherPlatformController;
+use App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation\ElfLandController;
+use App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation\PitbossDropController;
+use App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation\CragmineController;
+
+use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestAfterWarController;
+use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestSundayController;
+use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestSaturdayController;
+use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestFridayController;
+use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestThursdayController;
+
+
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Api\ServerRulesController;
-use App\Http\Controllers\Api\MapInformationController; // Asumsi ini adalah controller generik untuk Maps
-use App\Http\Controllers\Api\RaceHqNpcController;
+use App\Http\Controllers\Api\MapInformationController;
 use App\Http\Controllers\Api\DonationController;
+use App\Http\Controllers\Api\GameInfo\GameInformationController;
 use App\Http\Controllers\Api\Donation\RetailDonationController;
 use App\Http\Controllers\Api\Donation\ServiceDonationController;
 use App\Http\Controllers\Api\Donation\SeassonPassDonationController;
 use App\Http\Controllers\Api\Donation\PackageDonationController;
 use App\Http\Controllers\Api\Donation\HowToDonationController;
-use App\Http\Controllers\Api\GameInfo\ServerInfo\GeneralInfo\FeaturesInfo\FeaturesDisableController;
-use App\Http\Controllers\Api\GameInfo\ServerInfo\GeneralInfo\FeaturesInfo\FeaturesEnableController;
 
-use App\Models\GameInfo\QuestInfo\{
-    DailyQuestAfterWar,
-    DailyQuestTuesday,
-    DailyQuestWednesday,
-    DailyQuestThursday,
-    DailyQuestFriday,
-    DailyQuestSaturday,
-    DailyQuestSunday,
-};
-use App\Models\GameInfo\ServerInfo\DropList\{
-    DropOnHq,
-    ElanPlateau,
-    ElfLand,
-    EtherPlatform,
-    OutcastLand,
-    PitbossDrop,
-    SetteDesert,
-    VolcanicCauldron,
-};
-use App\Models\GameInfo\ServerInfo\NPCList\{
-    ElanPlateauNpc,
-    RaceHqNpc,
-    SetteDessertNpc,
-    VolcanicCauldronNpc,
-};
+
 
 Route::prefix('game-info')->name('game-info.')->group(function () {
+
+    // --------------------
+    // Game Information (General) - CRUD for game_informations table
+    // PERBAIKAN: Mengubah prefix dari 'general-information' menjadi 'game-data'
+    // --------------------
+    Route::prefix('game-data')->name('game-data.')->group(function () {
+        Route::get('/', [GameInformationController::class, 'index'])->name('index');
+        Route::post('/', [GameInformationController::class, 'store'])->name('store');
+        Route::get('/{id}', [GameInformationController::class, 'show'])->name('show');
+        Route::put('/{id}', [GameInformationController::class, 'update'])->name('update');
+        Route::delete('/{id}', [GameInformationController::class, 'destroy'])->name('destroy');
+    });
 
     // --------------------
     // Server Information
@@ -56,40 +66,39 @@ Route::prefix('game-info')->name('game-info.')->group(function () {
         Route::delete('/pendant-information/{id}', [PendantInformationController::class, 'destroy'])->name('pendant.destroy');
 
         // Gem Info
-        Route::get('/gem-information', [GemInformationController::class, 'index'])->name('gem.index'); // Disesuaikan, seharusnya ini untuk semua gem
+        Route::get('/gem-information', [GemInformationController::class, 'index'])->name('gem.index');
         Route::post('/gem-information', [GemInformationController::class, 'store'])->name('gem.store');
-        Route::get('/gem-information/{id}', [GemInformationController::class, 'show'])->name('gem.show'); // Disesuaikan, seharusnya ini untuk gem spesifik
+        Route::get('/gem-information/{id}', [GemInformationController::class, 'show'])->name('gem.show');
         Route::put('/gem-information/{id}', [GemInformationController::class, 'update'])->name('gem.update');
         Route::delete('/gem-information/{id}', [GemInformationController::class, 'destroy'])->name('gem.destroy');
 
         // Features Disable
-        Route::get('/feature-disable', [FeaturesDisableController::class, 'index'])->name('featuresdisable.index'); // show and index were swapped for feature-disable
+        Route::get('/feature-disable', [FeaturesDisableController::class, 'index'])->name('featuresdisable.index');
         Route::post('/feature-disable', [FeaturesDisableController::class, 'store'])->name('featuresdisable.store');
         Route::get('/feature-disable/{id}', [FeaturesDisableController::class, 'show'])->name('featuresdisable.show');
         Route::put('/feature-disable/{id}', [FeaturesDisableController::class, 'update'])->name('featuresdisable.update');
         Route::delete('/feature-disable/{id}', [FeaturesDisableController::class, 'destroy'])->name('featuresdisable.destroy');
 
         // Features Enable
-        Route::get('/feature-enable', [FeaturesEnableController::class, 'index'])->name('featuresenable.index'); // Adjusted
-        Route::post('/feature-enable', [FeaturesEnableController::class, 'store'])->name('featuresenable.store'); // Corrected
-        Route::get('/feature-enable/{id}', [FeaturesEnableController::class, 'show'])->name('featuresenable.show'); // Adjusted
-        Route::put('/feature-enable/{id}', [FeaturesEnableController::class, 'update'])->name('featuresenable.update'); // Corrected
-        Route::delete('/feature-enable/{id}', [FeaturesEnableController::class, 'destroy'])->name('featuresenable.destroy'); // Corrected
+        Route::get('/feature-enable', [FeaturesEnableController::class, 'index'])->name('featuresenable.index');
+        Route::post('/feature-enable', [FeaturesEnableController::class, 'store'])->name('featuresenable.store');
+        Route::get('/feature-enable/{id}', [FeaturesEnableController::class, 'show'])->name('featuresenable.show');
+        Route::put('/feature-enable/{id}', [FeaturesEnableController::class, 'update'])->name('featuresenable.update');
+        Route::delete('/feature-enable/{id}', [FeaturesEnableController::class, 'destroy'])->name('featuresenable.destroy');
 
         // NPC Info
-        $npclist = [
-            'elanplateaunpc' => ElanPlateauNpc::class,
-            'racehqnpc' => RaceHqNpc::class,
-            'settedessertnpc' => SetteDessertNpc::class,
-            'volcaniccauldronnpc' => VolcanicCauldronNpc::class,
+        $NPCList = [
+            'elanplateaunpc' => ElanPlateauNpcController::class,
+            'racehqnpc' => RaceHqNpcController::class,
+            'settedessertnpc' => SetteDessertNpcController::class,
+            'volcaniccauldronnpc' => VolcanicCauldronNpcController::class,
         ];
 
-        foreach ($npclist as $prefix => $controller) {
+        foreach ($NPCList as $prefix => $controller) {
             Route::prefix($prefix)->name("$prefix.")->group(function () use ($controller) {
-                // Biasanya index tidak memiliki {id} dan show memilikinya
-                Route::get('/', [$controller, 'index'])->name('index'); // Untuk mengambil semua
+                Route::get('/', [$controller, 'index'])->name('index');
                 Route::post('/', [$controller, 'store'])->name('store');
-                Route::get('/{id}', [$controller, 'show'])->name('show'); // Untuk mengambil spesifik
+                Route::get('/{id}', [$controller, 'show'])->name('show');
                 Route::put('/{id}', [$controller, 'update'])->name('update');
                 Route::delete('/{id}', [$controller, 'destroy'])->name('destroy');
             });
@@ -97,22 +106,22 @@ Route::prefix('game-info')->name('game-info.')->group(function () {
 
         // Drop List Info
         $droplist = [
-            'droponhq' => DropOnHq::class,
-            'elanplateau' => ElanPlateau::class,
-            'elfland' => ElfLand::class,
-            'etherplatform' => EtherPlatform::class,
-            'outcastland' => OutcastLand::class,
-            'pitbossdrop' => PitbossDrop::class,
-            'settedesert' => SetteDesert::class,
-            'volcaniccauldron' => VolcanicCauldron::class,
+            'droponhq' => DropOnHqController::class,
+            'elanplateau' => ElanPlateauController::class,
+            'elfland' => ElfLandController::class,
+            'etherplatform' => EtherPlatformController::class,
+            'outcastland' => OutcastLandController::class,
+            'pitbossdrop' => PitbossDropController::class,
+            'settedesert' => SetteDesertController::class,
+            'cragmine' => CragmineController::class,
+            'volcaniccauldron' => VolcanicCauldronController::class,
         ];
 
         foreach ($droplist as $prefix => $controller) {
             Route::prefix($prefix)->name("$prefix.")->group(function () use ($controller) {
-                // Biasanya index tidak memiliki {id} dan show memilikinya
-                Route::get('/', [$controller, 'index'])->name('index'); // Untuk mengambil semua
-                Route::post('/', [$controller, 'store'])->name('store');
-                Route::get('/{id}', [$controller, 'show'])->name('show'); // Untuk mengambil spesifik
+                Route::get('/', [$controller, 'index'])->name('index');
+                Route::post('/', action: [$controller, 'store'])->name('store');
+                Route::get('/{id}', [$controller, 'show'])->name('show');
                 Route::put('/{id}', [$controller, 'update'])->name('update');
                 Route::delete('/{id}', [$controller, 'destroy'])->name('destroy');
             });
@@ -125,21 +134,20 @@ Route::prefix('game-info')->name('game-info.')->group(function () {
     // --------------------
     Route::prefix('quest-information')->name('quest-information.')->group(function () {
         $quests = [
-            'dailyquestafterwar' => DailyQuestAfterWar::class,
+            'dailyquestafterwar' => DailyQuestAfterWarController::class,
             'dailyquesttuesday' => DailyQuestTuesday::class,
             'dailyquestwednesday' => DailyQuestWednesday::class,
-            'dailyquestthursday' => DailyQuestThursday::class,
-            'dailyquestfriday' => DailyQuestFriday::class,
-            'dailyquestsaturday' => DailyQuestSaturday::class,
-            'dailyquestsunday' => DailyQuestSunday::class,
+            'dailyquestthursday' => DailyQuestThursdayController::class,
+            'dailyquestfriday' => DailyQuestFridayController::class,
+            'dailyquestsaturday' => DailyQuestSaturdayController::class,
+            'dailyquestsunday' => DailyQuestSundayController::class,
         ];
 
         foreach ($quests as $prefix => $controller) {
             Route::prefix($prefix)->name("$prefix.")->group(function () use ($controller) {
-                // Biasanya index tidak memiliki {id} dan show memilikinya
-                Route::get('/', [$controller, 'index'])->name('index'); // Untuk mengambil semua
+                Route::get('/', [$controller, 'index'])->name('index');
                 Route::post('/', [$controller, 'store'])->name('store');
-                Route::get('/{id}', [$controller, 'show'])->name('show'); // Untuk mengambil spesifik
+                Route::get('/{id}', [$controller, 'show'])->name('show');
                 Route::put('/{id}', [$controller, 'update'])->name('update');
                 Route::delete('/{id}', [$controller, 'destroy'])->name('destroy');
             });

@@ -16,7 +16,7 @@ class MapInformation extends Model
     ];
     public function gameInfoSection()
 {
-    return $this->belongsTo(\App\Models\GameInfo\GameInfoSection::class, 'game_info_id');
+    return $this->belongsTo(\App\Models\GameInfo\GameInformation::class, 'game_information_id');
 }
 
 }
