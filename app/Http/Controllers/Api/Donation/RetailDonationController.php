@@ -14,7 +14,6 @@ class RetailDonationController extends Controller
      */
     public function index(): JsonResponse
     {
-        // Ubah $droplists menjadi $retailDonations untuk konsistensi dengan nama model
         $retailDonations = RetailDonation::all();
         return response()->json($retailDonations);
     }
@@ -24,8 +23,7 @@ class RetailDonationController extends Controller
      */
     public function show($id): JsonResponse
     {
-        // Gunakan findOrFail() untuk penanganan 404 yang lebih ringkas.
-        // Laravel secara otomatis akan mengembalikan 404 jika ID tidak ditemukan.
+        
         $retailDonation = RetailDonation::findOrFail($id);
         return response()->json($retailDonation);
     }
@@ -36,21 +34,16 @@ class RetailDonationController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            // Pastikan 'game_information_id' benar-benar nama kolom di tabel game_informations
             'donation_informations_id' => 'required|exists:donation_informations,id',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'pricing' => 'required|string',
         ]);
 
-        // Ubah $droplist menjadi $retailDonation untuk konsistensi
         $retailDonation = RetailDonation::create($validated);
         return response()->json($retailDonation, 201); // Mengembalikan status 201 Created
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id): JsonResponse
     {
         $retailDonation = RetailDonation::findOrFail($id); // Gunakan findOrFail()

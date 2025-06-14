@@ -12,7 +12,7 @@ class GeneralInformationController extends Controller
         $data = GeneralInformation::with([
             'FeaturesInformation.FeaturesEnable',
             'FeaturesInformation.FeaturesDisable'
-        ])->first(); // atau ->get() jika ingin semua
+        ])->first(); 
 
         return response()->json($data);
     }

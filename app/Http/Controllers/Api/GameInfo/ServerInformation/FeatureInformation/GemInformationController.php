@@ -51,7 +51,6 @@ class GemInformationController extends Controller
 
         $validated = $request->validate([
             'game_information_id' => 'required|exists:game_informations,id',
-            // MODIFIED: Changed validation to allow nullable file upload for images
             'image' => 'nullable|file|image|mimes:jpg,jpeg,png|max:2048', 
             'name_item' => 'required|string',
             'type' => 'required|string',
@@ -59,15 +58,13 @@ class GemInformationController extends Controller
 
         ]);
 
-        // ACTIVATED: Logic for storing and optionally deleting old image file
         if ($request->hasFile('image')) {
-            // Delete old file if it exists
             if ($info->image && Storage::exists('public/gems/' . $info->image)) {
                 Storage::delete('public/gems/' . $info->image);
             }
             $filename = time() . '_' . $request->file('image')->getClientOriginalName();
             $path = $request->file('image')->storeAs('public/gems', $filename);
-            $validated['image'] = $filename; // Saves only the filename to the database
+            $validated['image'] = $filename; 
         }
 
 
@@ -78,7 +75,6 @@ class GemInformationController extends Controller
     public function destroy($id)
     {
         $info = GemInformation::findOrFail($id);
-        // ACTIVATED: Logic to delete the image file when the record is destroyed
         if ($info->image && Storage::exists('public/gems/' . $info->image)) {
             Storage::delete('public/gems/' . $info->image);
         }

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Donation\SeassonPassDonation;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse; 
-use Illuminate\Support\Facades\Storage; // <-- UNCOMMENTED: Added Storage facade for file operations
+use Illuminate\Support\Facades\Storage; 
 
 class SeassonPassDonationController extends Controller
 {
@@ -59,15 +59,13 @@ class SeassonPassDonationController extends Controller
 
         ]);
 
-        // ACTIVATED: Logic for storing and optionally deleting old image file
         if ($request->hasFile('image')) {
-            // Delete old file if it exists
             if ($info->image && Storage::exists('public/gems/' . $info->image)) {
                 Storage::delete('public/gems/' . $info->image);
             }
             $filename = time() . '_' . $request->file('image')->getClientOriginalName();
             $path = $request->file('image')->storeAs('public/gems', $filename);
-            $validated['image'] = $filename; // Saves only the filename to the database
+            $validated['image'] = $filename;
         }
 
 

@@ -7,14 +7,12 @@ use Illuminate\Http\Request;
 
 class FeaturesEnableController extends Controller
 {
-    // Tampilkan semua fitur yang dinonaktifkan
     public function index()
     {
         $features = FeaturesEnable::all();
         return response()->json($features);
     }
 
-    // Tampilkan satu fitur berdasarkan ID
     public function show($id)
     {
         $feature = FeaturesEnable::find($id);
@@ -24,7 +22,6 @@ class FeaturesEnableController extends Controller
         return response()->json($feature);
     }
 
-    // Tambahkan fitur disable baru
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -37,7 +34,6 @@ class FeaturesEnableController extends Controller
         return response()->json($feature, 201);
     }
 
-    // Perbarui fitur disable
     public function update(Request $request, $id)
     {
         $feature = FeaturesEnable::findOrFail($id);
@@ -52,7 +48,6 @@ class FeaturesEnableController extends Controller
         return response()->json($feature);
     }
 
-    // Hapus fitur disable
     public function destroy($id)
     {
         $feature = FeaturesEnable::findOrFail($id);

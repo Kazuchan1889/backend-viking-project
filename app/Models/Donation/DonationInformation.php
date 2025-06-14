@@ -14,7 +14,7 @@ class DonationInformation extends Model
      *
      * @var string
      */
-    protected $table = 'donation_informations'; // Menentukan nama tabel di database (plural dengan 's')
+    protected $table = 'donation_informations'; 
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +22,7 @@ class DonationInformation extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', // Hanya kolom 'name' yang boleh diisi secara massal
+        'name', 
     ];
 
     /**
@@ -31,8 +31,7 @@ class DonationInformation extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        // 'created_at' => 'datetime', // Opsional: jika ingin secara eksplisit mengelola datetime
-        // 'updated_at' => 'datetime',
+        
     ];
 
     /**
@@ -40,5 +39,5 @@ class DonationInformation extends Model
      *
      * @var bool
      */
-    public $timestamps = true; // Mengaktifkan otomatisasi created_at dan updated_at
+    public $timestamps = true; 
 }

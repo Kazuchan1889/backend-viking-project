@@ -62,8 +62,6 @@ Route::prefix('game-info')->name('game-info.')->group(function () {
         // URL: /api/game-info/server-information/gem-information
         Route::apiResource('gem-information', GemInformationController::class)->names('gem-information');
 
-        // General Information Features (Disable/Enable)
-        // URL: /api/game-info/server-information/feature-disable
         Route::apiResource('feature-disable', FeaturesDisableController::class)->names('feature-disable');
         // URL: /api/game-info/server-information/feature-enable
         Route::apiResource('feature-enable', FeaturesEnableController::class)->names('feature-enable');
@@ -145,8 +143,6 @@ Route::prefix('donation')->name('donation.')->group(function () {
 
     Route::apiResource('donation-info', DonationInformationController::class)->names('donation-info');
     Route::prefix('service')->name('service.')->group(function () {
-        // HAPUS BARIS INI ATAU KOMENTARI! Ini adalah penyebab konflik rute.
-        // Route::apiResource('/', ServiceDonationController::class)->except(['create', 'edit'])->parameters(['' => 'service']);
 
         Route::apiResource('gemstone', TabGemstoneController::class)->names('gemstone');
         Route::apiResource('resources', TabResourcesController::class)->names('resources');

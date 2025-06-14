@@ -10,7 +10,6 @@ class FeatureInformationController extends Controller
 {
     public function index()
     {
-        // Ambil semua data ServerInformation beserta relasi-relasinya
         $questinfo = FeatureInformation::with([
             'PendantInformation',
             'GemInformation'
@@ -33,7 +32,6 @@ class FeatureInformationController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            // Tambahkan field lain jika dibutuhkan
         ]);
 
         $questinfo = FeatureInformation::create($validated);
@@ -47,7 +45,6 @@ class FeatureInformationController extends Controller
 
         $validated = $request->validate([
             'title' => 'sometimes|required|string|max:255',
-            // Tambahkan field lain jika dibutuhkan
         ]);
 
         $questinfo->update($validated);
