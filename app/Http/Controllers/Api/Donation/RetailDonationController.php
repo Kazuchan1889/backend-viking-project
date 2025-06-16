@@ -41,12 +41,12 @@ class RetailDonationController extends Controller
         ]);
 
         $retailDonation = RetailDonation::create($validated);
-        return response()->json($retailDonation, 201); // Mengembalikan status 201 Created
+        return response()->json($retailDonation, 201); 
     }
 
     public function update(Request $request, $id): JsonResponse
     {
-        $retailDonation = RetailDonation::findOrFail($id); // Gunakan findOrFail()
+        $retailDonation = RetailDonation::findOrFail($id); 
 
         $validated = $request->validate([
             'donation_informations_id' => 'required|exists:donation_informations,id',
@@ -64,7 +64,7 @@ class RetailDonationController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $retailDonation = RetailDonation::findOrFail($id); // Gunakan findOrFail()
+        $retailDonation = RetailDonation::findOrFail($id);
         $retailDonation->delete();
 
         return response()->json(['message' => 'Deleted successfully']);

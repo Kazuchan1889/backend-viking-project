@@ -11,7 +11,7 @@ class ServiceDonation extends Model
     use HasFactory;
 
     protected $fillable = [
-        'donation_informations_id', // foreign key
+        'donation_informations_id', 
         'title',
         'description',
         'pricing',

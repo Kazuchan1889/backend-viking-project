@@ -4,41 +4,34 @@ namespace App\Models\GameInfo;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\GameInfo\ServerInfo\GeneralInfo\FeaturesInfo\FeaturesDisable; // Import model FeaturesDisable
+use App\Models\GameInfo\ServerInfo\GeneralInfo\FeaturesInfo\FeaturesEnable; // Import model FeaturesEnable
 
 class GameInformation extends Model
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'game_informations'; // Menentukan nama tabel di database (plural dengan 's')
+    protected $table = 'game_informations'; 
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        'name', // Hanya kolom 'name' yang boleh diisi secara massal
+        'name', 
+        // Tambahkan kolom lain jika ada di tabel game_informations yang ingin bisa diisi massal
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
-        // 'created_at' => 'datetime', // Opsional: jika ingin secara eksplisit mengelola datetime
+        // 'created_at' => 'datetime', 
         // 'updated_at' => 'datetime',
     ];
 
-    /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    public $timestamps = true; // Mengaktifkan otomatisasi created_at dan updated_at
+    public $timestamps = true; 
+
+    public function featuresEnable()
+    {
+        return $this->hasMany(FeaturesEnable::class, 'game_information_id', 'id');
+    }
+
+    public function featuresDisable()
+    {
+        return $this->hasMany(FeaturesDisable::class, 'game_information_id', 'id');
+    }
 }

@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Api\GameInfo\ServerInformation\FeatureInformation
 use App\Http\Controllers\Controller;
 use App\Models\GameInfo\ServerInfo\FeatureInfo\GemInformation;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage; // <-- UNCOMMENTED: Added Storage facade for file operations
-
+use Illuminate\Support\Facades\Storage; 
 class GemInformationController extends Controller
 {
     public function index()

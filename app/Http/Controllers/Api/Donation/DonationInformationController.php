@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Donation;
 
 use App\Http\Controllers\Controller;
-use App\Models\Donation\DonationInformation; 
+use App\Models\Donation\DonationInformation;
 use Illuminate\Http\Request;
 
 class DonationInformationController extends Controller
@@ -26,7 +26,7 @@ class DonationInformationController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:game_informations,name', // Pastikan nama unik
+            'name' => 'required|string|max:255|unique:donation_informations,name',
         ]);
 
         $info = DonationInformation::create($validated);
@@ -38,7 +38,7 @@ class DonationInformationController extends Controller
         $info = DonationInformation::findOrFail($id);
 
         $validated = $request->validate([
-            'name' => 'sometimes|required|string|max:255|unique:game_informations,name,' . $id,
+            'name' => 'sometimes|required|string|max:255|unique:donation_informations,name,' . $id,
         ]);
 
         $info->update($validated);

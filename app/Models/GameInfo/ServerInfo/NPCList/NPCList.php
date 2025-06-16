@@ -2,37 +2,27 @@
 
 namespace App\Models\GameInfo\ServerInfo\NPCList;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\GameInfo\ServerInfo\NPCList\RaceHqNpc;
-use App\Models\GameInfo\ServerInfo\NPCList\ElanPlateauNpc;
-use App\Models\GameInfo\ServerInfo\NPCList\SetteDessertNpc;
-use App\Models\GameInfo\ServerInfo\NPCList\VolcanicCauldronNpc;
+use App\Models\GameInfo\MapInformation;
 
-
-
-
-class NPCList extends Model
+class NpcList extends Model
 {
-    protected $fillable = ['title'];
+    use HasFactory;
 
-    public function racehqnpc()
-    {
-        return $this->hasMany(related: RaceHqNpc::class);
-    }
+    protected $table = 'npclist'; 
 
-    public function elanplateaunpc()
-    {
-        return $this->hasMany(ElanPlateauNpc::class);
-    }
+    protected $fillable = [
+        'npc',           
+        'buy_with',  
+        'map_information_id',         
+    ];
 
-    public function settedessertnpc()
+    /**
+     * Relasi ke MapInformation (many-to-one)
+     */
+    public function mapInformation()
     {
-        return $this->hasMany(SetteDessertNpc::class);
-    }
-
-    public function volcaniccauldronnpc()
-    {
-        return $this->hasMany(VolcanicCauldronNpc::class);
+        return $this->belongsTo(MapInformation::class, 'map_information_id', 'id');
     }
 }
-

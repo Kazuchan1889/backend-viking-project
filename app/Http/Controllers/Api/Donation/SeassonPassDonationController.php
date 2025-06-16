@@ -37,8 +37,8 @@ class SeassonPassDonationController extends Controller
 
         if ($request->hasFile('image')) {
             $filename = time() . '_' . $request->file('image')->getClientOriginalName();
-            $path = $request->file('image')->storeAs('public/gems', $filename); // Stores in storage/app/public/gems
-            $validated['image'] = $filename; // Saves only the filename to the database
+            $path = $request->file('image')->storeAs('public/seassonpass', $filename); // Stores in storage/app/public/gems
+            $validated['image'] = $filename; 
         }
 
 
@@ -60,11 +60,11 @@ class SeassonPassDonationController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            if ($info->image && Storage::exists('public/gems/' . $info->image)) {
-                Storage::delete('public/gems/' . $info->image);
+            if ($info->image && Storage::exists('public/seassonpass/' . $info->image)) {
+                Storage::delete('public/seassonpass/' . $info->image);
             }
             $filename = time() . '_' . $request->file('image')->getClientOriginalName();
-            $path = $request->file('image')->storeAs('public/gems', $filename);
+            $path = $request->file('image')->storeAs('public/seassonpass', $filename);
             $validated['image'] = $filename;
         }
 
@@ -76,9 +76,8 @@ class SeassonPassDonationController extends Controller
     public function destroy($id):JsonResponse
     {
         $info = SeassonPassDonation::findOrFail($id);
-        // ACTIVATED: Logic to delete the image file when the record is destroyed
-        if ($info->image && Storage::exists('public/gems/' . $info->image)) {
-            Storage::delete('public/gems/' . $info->image);
+        if ($info->image && Storage::exists('public/seassonpass/' . $info->image)) {
+            Storage::delete('public/seassonpass/' . $info->image);
         }
         $info->delete();
 

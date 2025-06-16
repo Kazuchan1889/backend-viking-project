@@ -4,40 +4,44 @@ namespace App\Models\Donation;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Donation\RetailDonation;
+use App\Models\Donation\ServiceDonation\ServiceDonation;
+use App\Models\Donation\SeassonPassDonation; 
+use App\Models\Donation\PackageDonation;
+use App\Models\Donation\HowToDonation;
 
 class DonationInformation extends Model
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'donation_informations'; 
+    protected $table = 'donation_informations';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        'name', 
+        'name',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        
-    ];
+    public function retailDonations()
+    {
+        return $this->hasMany(RetailDonation::class);
+    }
 
-    /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    public $timestamps = true; 
+    public function serviceDonations()
+    {
+        return $this->hasMany(ServiceDonation::class);
+    }
+
+    public function seasonPassDonations()
+    {
+        return $this->hasMany(SeassonPassDonation::class);
+    }
+
+    public function packageDonations()
+    {
+        return $this->hasMany(PackageDonation::class);
+    }
+
+    public function howToDonations()
+    {
+        return $this->hasMany(HowToDonation::class);
+    }
 }

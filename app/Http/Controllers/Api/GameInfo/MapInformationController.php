@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\GameInfo;
 
 use App\Http\Controllers\Controller;
-use App\Models\GameInfo\MapInformation; // Pastikan namespace ini benar dan mengarah ke model MapInformation Anda
+use App\Models\GameInfo\MapInformation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -24,21 +24,11 @@ class MapInformationController extends Controller
         return response()->json($info);
     }
 
-    public function getMapDataByNumber($mapNumber)
-    {
-        $mapData = MapInformation::where('map_number', $mapNumber)->get();
-        if ($mapData->isEmpty()) {
-            return response()->json(['message' => 'No map data found for this map number.'], 404);
-        }
-        return response()->json($mapData);
-    }
-
     public function store(Request $request)
     {
         $validated = $request->validate([
             'game_information_id' => 'required|integer|exists:game_informations,id',
-            'map_number' => 'required|string|max:255', 
-            'location_name' => 'required|string|max:255',
+            'map_name' => 'required|string|max:255',
             'image' => 'nullable|file|image|mimes:jpg,jpeg,png,gif,svg', 
         ]);
 
@@ -60,8 +50,7 @@ class MapInformationController extends Controller
 
         $validated = $request->validate([
             'game_information_id' => 'required|integer|exists:game_informations,id', // Tambahkan 'integer'
-            'map_number' => 'required|string|max:255', // Tambahkan max length
-            'location_name' => 'required|string|max:255',
+            'map_name' => 'required|string|max:255', 
             'image' => 'nullable|file|image|mimes:jpg,jpeg,png,gif,svg', // Ubah ke 'nullable' karena tidak selalu ada file baru
         ]);
 

@@ -1,50 +1,39 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\NewsController;
+
+use App\Http\Controllers\Api\GameInfo\MapInformationController;
+use App\Http\Controllers\Api\GameInfo\GameInformationController;
+use App\Http\Controllers\Api\GameInfo\ServerRulesController;
+
 use App\Http\Controllers\Api\GameInfo\ServerInformation\FeatureInformation\PendantInformationController;
 use App\Http\Controllers\Api\GameInfo\ServerInformation\FeatureInformation\GemInformationController;
+use App\Http\Controllers\Api\GameInfo\ServerInformation\GeneralInformation\SystemInformationController;
+use App\Http\Controllers\Api\GameInfo\ServerInformation\GeneralInformation\ServersInformationController;
 use App\Http\Controllers\Api\GameInfo\ServerInformation\GeneralInformation\FeaturesInformation\FeaturesDisableController;
 use App\Http\Controllers\Api\GameInfo\ServerInformation\GeneralInformation\FeaturesInformation\FeaturesEnableController;
-use App\Http\Controllers\Api\GameInfo\ServerInformation\NPCListInformation\RaceHqNpcController;
-use App\Http\Controllers\Api\GameInfo\ServerInformation\NPCListInformation\ElanPlateauNpcController;
-use App\Http\Controllers\Api\GameInfo\ServerInformation\NPCListInformation\SetteDessertNpcController;
-use App\Http\Controllers\Api\GameInfo\ServerInformation\NPCListInformation\VolcanicCauldronNpcController;
-use App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation\DropOnHqController;
-use App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation\ElanPlateauController;
-use App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation\VolcanicCauldronController;
-use App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation\OutcastLandController;
-use App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation\SetteDesertController;
-use App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation\EtherPlatformController;
-use App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation\ElfLandController;
-use App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation\PitbossDropController;
-use App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation\CragmineController;
+use App\Http\Controllers\Api\GameInfo\ServerInformation\NPCListInformation\NpcListController;
+use App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation\DropListController;
 
 use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestAfterWarController;
-use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestSundayController;
-use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestSaturdayController;
-use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestFridayController;
-use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestThursdayController;
-use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestWednesdayController;
-use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestTuesdayController;
-use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestMondayController;
+use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestController;
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\NewsController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Api\GameInfo\ServerRulesController;
-use App\Http\Controllers\Api\GameInfo\MapInformationController;
+
 use App\Http\Controllers\Api\Donation\DonationInformationController;
-use App\Http\Controllers\Api\GameInfo\GameInformationController;
 use App\Http\Controllers\Api\Donation\RetailDonationController;
-use App\Http\Controllers\Api\Donation\ServiceDonation\ServiceDonationController;
-use App\Http\Controllers\Api\Donation\ServiceDonation\TabResourcesController;
-use App\Http\Controllers\Api\Donation\ServiceDonation\TabGemstoneController;
-
-use App\Http\Controllers\Api\Donation\SeassonPassDonationController;
+use App\Http\Controllers\Api\Donation\SeassonPassDonationController; 
 use App\Http\Controllers\Api\Donation\PackageDonationController;
 use App\Http\Controllers\Api\Donation\HowToDonationController;
 
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Api\Donation\ServiceDonation\ServiceDonationController;
+use App\Http\Controllers\Api\Donation\ServiceDonation\TabResourcesController;
+use App\Http\Controllers\Api\Donation\ServiceDonation\TabGemstoneController;
 
 
 // =======================
@@ -53,105 +42,51 @@ use App\Http\Controllers\Auth\NewPasswordController;
 // =======================
 Route::prefix('game-info')->name('game-info.')->group(function () {
 
-    // Game Information (General) - CRUD for game_informations table
-    // URL: /api/game-info/game-data
     Route::apiResource('game-data', GameInformationController::class);
+    Route::apiResource('server-rules', ServerRulesController::class);
 
-    // Server Information - Grouping various server-related data
+    // Map Info Routes
+    Route::apiResource('mapinfo', MapInformationController::class)->except(['create', 'edit']);
+    Route::get('mapinfo/by-number/{mapNumber}', [MapInformationController::class, 'getMapDataByNumber'])->name('mapinfo.by-number');
+
+
     Route::prefix('server-information')->name('server-information.')->group(function () {
+        Route::apiResource('pendant-information', PendantInformationController::class);
+        Route::apiResource('gem-information', GemInformationController::class);
+        Route::apiResource('serversinfo', ServersInformationController::class);
+        Route::apiResource('systeminfo', SystemInformationController::class);
+        Route::apiResource('feature-disable', FeaturesDisableController::class);
+        Route::apiResource('feature-enable', FeaturesEnableController::class);
+        Route::apiResource('npclist', NpcListController::class);
+        Route::apiResource('droplist', DropListController::class);
+    });
 
-        // Feature Information
-        // URL: /api/game-info/server-information/pendant-information
-        Route::apiResource('pendant-information', PendantInformationController::class)->names('pendant-information');
-        // URL: /api/game-info/server-information/gem-information
-        Route::apiResource('gem-information', GemInformationController::class)->names('gem-information');
-
-        Route::apiResource('feature-disable', FeaturesDisableController::class)->names('feature-disable');
-        // URL: /api/game-info/server-information/feature-enable
-        Route::apiResource('feature-enable', FeaturesEnableController::class)->names('feature-enable');
-
-        // NPC List Information
-        $NPCList = [
-            'elanplateaunpc' => ElanPlateauNpcController::class,
-            'racehqnpc' => RaceHqNpcController::class,
-            'settedessertnpc' => SetteDessertNpcController::class,
-            'volcaniccauldronnpc' => VolcanicCauldronNpcController::class,
-        ];
-        foreach ($NPCList as $prefix => $controller) {
-            // URL: /api/game-info/server-information/{prefix} (e.g., /elanplateaunpc)
-            Route::apiResource($prefix, $controller)->names($prefix);
-        }
-
-        // Drop List Information
-        $droplist = [
-            'droponhq' => DropOnHqController::class,
-            'elanplateau' => ElanPlateauController::class,
-            'elfland' => ElfLandController::class,
-            'etherplatform' => EtherPlatformController::class,
-            'outcastland' => OutcastLandController::class,
-            'pitbossdrop' => PitbossDropController::class,
-            'settedesert' => SetteDesertController::class,
-            'cragmine' => CragmineController::class,
-            'volcaniccauldron' => VolcanicCauldronController::class,
-        ];
-        foreach ($droplist as $prefix => $controller) {
-            // URL: /api/game-info/server-information/{prefix} (e.g., /droponhq)
-            Route::apiResource($prefix, $controller)->names($prefix);
-        }
-    }); // End of server-information group
-
-
-    // Quest Information
     Route::prefix('quest-information')->name('quest-information.')->group(function () {
         $quests = [
             'dailyquestafterwar' => DailyQuestAfterWarController::class,
-            'dailyquesttuesday' => DailyQuestTuesdayController::class,
-            'dailyquestwednesday' => DailyQuestWednesdayController::class,
-            'dailyquestthursday' => DailyQuestThursdayController::class,
-            'dailyquestfriday' => DailyQuestFridayController::class,
-            'dailyquestsaturday' => DailyQuestSaturdayController::class,
-            'dailyquestsunday' => DailyQuestSundayController::class,
-            'dailyquestmonday' => DailyQuestMondayController::class,
+            'dailyquest' => DailyQuestController::class,
         ];
+
         foreach ($quests as $prefix => $controller) {
-            // URL: /api/game-info/quest-information/{prefix} (e.g., /dailyquestafterwar)
             Route::apiResource($prefix, $controller)->names($prefix);
         }
-    }); // End of quest-information group
+    });
 
-
-    // Server Rules
-    // URL: /api/game-info/server-rules
-    Route::apiResource('server-rules', ServerRulesController::class)->names('server-rules');
-
-
-    // Map Information
-    Route::prefix('mapinfo')->name('mapinfo.')->group(function () {
-        // Custom route for map data by number
-        // URL: /api/game-info/mapinfo/by-number/{mapNumber}
-        Route::get('by-number/{mapNumber}', [MapInformationController::class, 'getMapDataByNumber'])->name('by-number');
-
-        // Standard CRUD for Map Information
-        // URL: /api/game-info/mapinfo (for index, store)
-        // URL: /api/game-info/mapinfo/{mapinfo} (for show, update, destroy)
-        Route::apiResource('/', MapInformationController::class)->except(['create', 'edit'])->parameters(['' => 'mapinfo']);
-    }); // End of mapinfo group
-
-}); // End of game-info group
+});
 
 // =======================
-// Main Donation Routes
-// Prefix all routes in this group with 'donation'
+// Donation Routes
+// Moved outside game-info prefix
 // =======================
 Route::prefix('donation')->name('donation.')->group(function () {
+    Route::apiResource('donation-info', DonationInformationController::class);
 
-    Route::apiResource('donation-info', DonationInformationController::class)->names('donation-info');
     Route::prefix('service')->name('service.')->group(function () {
-
-        Route::apiResource('gemstone', TabGemstoneController::class)->names('gemstone');
-        Route::apiResource('resources', TabResourcesController::class)->names('resources');
-        Route::apiResource('services', ServiceDonationController::class)->names('services'); // Ini adalah rute yang ingin Anda gunakan untuk daftar ServiceDonation
+        Route::apiResource('gemstone', TabGemstoneController::class);
+        Route::apiResource('resources', TabResourcesController::class);
+        Route::apiResource('services', ServiceDonationController::class);
     });
+
     $otherDonationTypes = [
         'retail' => RetailDonationController::class,
         'seassonpass' => SeassonPassDonationController::class,
@@ -160,45 +95,37 @@ Route::prefix('donation')->name('donation.')->group(function () {
     ];
 
     foreach ($otherDonationTypes as $prefix => $controller) {
-        // URL: /api/donation/{prefix} (e.g., /retail, /seassonpass)
         Route::apiResource($prefix, $controller)->names($prefix);
     }
-
-}); // End of main donation group
-
-// Routes for News
-Route::get('news', [NewsController::class, 'index']);
-Route::get('news/{id}', [NewsController::class, 'show']);
-Route::post('news', [NewsController::class, 'store']);
-Route::put('news/{id}', [NewsController::class, 'update']);
-Route::delete('news/{id}', [NewsController::class, 'destroy']);
-
-// Authenticated routes
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
-
-Route::middleware('auth:sanctum')->get('/logout', [AuthenticatedSessionController::class, 'destroy']);
-
-Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
-    return response()->json([
-        'user' => $request->user(),
-        'role' => $request->user()->getRoleNames()->first()
-    ]);
 });
 
+// =======================
+// News Routes
+// =======================
+Route::apiResource('news', NewsController::class)->except(['create', 'edit']); // Using apiResource for consistency
+
+
+// =======================
+// Authenticated routes
+// =======================
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/user', fn (Request $request) => $request->user());
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']); // Use POST for logout
+    Route::get('/me', fn (Request $request) => response()->json([
+        'user' => $request->user(),
+        'role' => $request->user()->getRoleNames()->first()
+    ]));
+
+    // This route seems specific for an admin session check, keep if needed.
+    Route::post('/admin/session', fn () => response()->json(['status' => 'admin logged in']));
+});
+
+// =======================
+// Public Auth routes
+// =======================
+Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 Route::post('/forgot-password', [PasswordResetLinkController::class, 'store']);
 Route::post('/reset-password', [NewPasswordController::class, 'store']);
 
-    // Admin session endpoint
-    Route::post('/admin/session', function () {
-        return response()->json(['status' => 'admin logged in']);
-    });
-});
-
-// Public route
-Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-
-// Auth route file (only required once)
+// Optional additional auth routes
 require __DIR__.'/auth.php';
