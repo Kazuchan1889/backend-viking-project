@@ -25,13 +25,10 @@ class FeaturesDisableController extends Controller
         return response()->json($feature);
     }
 
-    // Tambahkan fitur disable baru
     public function store(Request $request)
     {
         $validated = $request->validate([
-            // PERBAIKAN: Mengubah 'general_informations' menjadi 'game_informations'
-            'game_information_id' => 'required|exists:game_informations,id',
-            'title' => 'required|string',
+            'feature' => 'required|string',
             'description' => 'required|string',
         ]);
 
@@ -45,9 +42,7 @@ class FeaturesDisableController extends Controller
         $feature = FeaturesDisable::findOrFail($id);
 
         $validated = $request->validate([
-            // PERBAIKAN: Mengubah 'general_informations' menjadi 'game_informations'
-            'game_information_id' => 'required|exists:game_informations,id',
-            'title' => 'required|string',
+            'feature' => 'required|string',
             'description' => 'required|string',
         ]);
 

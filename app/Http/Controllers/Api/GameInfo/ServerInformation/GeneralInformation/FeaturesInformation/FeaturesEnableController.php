@@ -5,58 +5,43 @@ namespace App\Http\Controllers\Api\GameInfo\ServerInformation\GeneralInformation
 use App\Http\Controllers\Controller;
 use App\Models\GameInfo\ServerInfo\GeneralInfo\FeaturesInfo\FeaturesEnable;
 use Illuminate\Http\Request;
-use App\Models\GameInfo\GameInformation; // Penting: Import Model GameInformation jika belum
 
 class FeaturesEnableController extends Controller
 {
+    // Menampilkan seluruh fitur
     public function index()
     {
-        // Memuat relasi 'gameInformation' saat mengambil semua fitur
-        $features = FeaturesEnable::with(relations: 'gameInformation')->get(); 
+        $features = FeaturesEnable::all();
         return response()->json($features);
     }
 
-    public function show($id)
-    {
-        // Memuat relasi 'gameInformation' saat mengambil satu fitur
-        $feature = FeaturesEnable::with('gameInformation')->find($id); 
-        if (!$feature) {
-            return response()->json(['message' => 'Feature not found'], 404);
-        }
-        return response()->json($feature);
-    }
-
-    // Metode store, update, dan destroy tetap sama
+    // Menyimpan data fitur baru
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'game_information_id' => 'required|exists:game_informations,id',
-            'title' => 'required|string',
+            'feature' => 'required|string',
             'description' => 'required|string',
         ]);
 
         $feature = FeaturesEnable::create($validated);
-        // Mungkin Anda ingin mengembalikan feature yang baru dibuat beserta gameInformation-nya
-        // $feature->load('gameInformation'); // Memuat relasi setelah dibuat
         return response()->json($feature, 201);
     }
 
+    // Memperbarui data fitur berdasarkan ID
     public function update(Request $request, $id)
     {
         $feature = FeaturesEnable::findOrFail($id);
 
         $validated = $request->validate([
-            'game_information_id' => 'required|exists:game_informations,id',
-            'title' => 'required|string',
+            'feature' => 'required|string',
             'description' => 'required|string',
         ]);
 
         $feature->update($validated);
-        // Mungkin Anda ingin mengembalikan feature yang diperbarui beserta gameInformation-nya
-        // $feature->load('gameInformation'); // Memuat relasi setelah diperbarui
         return response()->json($feature);
     }
 
+    // Menghapus data fitur berdasarkan ID
     public function destroy($id)
     {
         $feature = FeaturesEnable::findOrFail($id);

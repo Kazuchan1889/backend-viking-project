@@ -23,8 +23,8 @@ class HowToDonationController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $retailDonation = HowToDonation::findOrFail($id);
-        return response()->json($retailDonation);
+        $howtoDonation = HowToDonation::findOrFail($id);
+        return response()->json($howtoDonation);
     }
 
     /**
@@ -33,13 +33,12 @@ class HowToDonationController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'donation_informations_id' => 'required|exists:donation_informations,id',
-            'title' => 'required|string|max:255',
+            'donation_guide' => 'required|string|max:255',
             'description' => 'required|string',
         ]);
 
-        $retailDonation = HowToDonation::create($validated);
-        return response()->json($retailDonation, 201); // Mengembalikan status 201 Created
+        $howtoDonation = HowToDonation::create($validated);
+        return response()->json($howtoDonation, 201); // Mengembalikan status 201 Created
     }
 
     /**
@@ -47,16 +46,15 @@ class HowToDonationController extends Controller
      */
     public function update(Request $request, $id): JsonResponse
     {
-        $retailDonation = HowToDonation::findOrFail($id); // Gunakan findOrFail()
+        $howtoDonation = HowToDonation::findOrFail($id); // Gunakan findOrFail()
 
         $validated = $request->validate([
-            'donation_informations_id' => 'required|exists:donation_informations,id',
-            'title' => 'required|string|max:255',
+            'donation_guide' => 'required|string|max:255',
             'description' => 'required|string',
         ]);
 
-        $retailDonation->update($validated);
-        return response()->json($retailDonation);
+        $howtoDonation->update($validated);
+        return response()->json($howtoDonation);
     }
 
     /**
@@ -64,8 +62,8 @@ class HowToDonationController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $retailDonation = HowToDonation::findOrFail($id); // Gunakan findOrFail()
-        $retailDonation->delete();
+        $howtoDonation = HowToDonation::findOrFail($id); // Gunakan findOrFail()
+        $howtoDonation->delete();
 
         return response()->json(['message' => 'Deleted successfully']);
     }

@@ -5,6 +5,7 @@ namespace App\Models\GameInfo\ServerInfo\DropList;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\GameInfo\MapInformation;
+use App\Models\GameInfo\Items;
 
 class DropList extends Model
 {
@@ -13,16 +14,18 @@ class DropList extends Model
     protected $table = 'droplist'; 
 
     protected $fillable = [
-        'droplist',           
-        'buy_with',           
-        'map_information_id', 
+        'monster',
+        'items_id',
+        'map_information_id',
     ];
 
-    /**
-     * Relasi ke MapInformation (many-to-one)
-     */
+    public function item()
+    {
+        return $this->belongsTo(Items::class, 'items_id');
+    }
+
     public function mapInformation()
     {
-        return $this->belongsTo(MapInformation::class, 'map_information_id', 'id');
+        return $this->belongsTo(MapInformation::class, 'map_information_id');
     }
 }

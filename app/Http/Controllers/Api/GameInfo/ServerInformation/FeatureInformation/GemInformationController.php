@@ -26,7 +26,6 @@ class GemInformationController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'game_information_id' => 'required|exists:game_informations,id',
             'image' => 'required|file|image|mimes:jpg,jpeg,png|max:2048', 
             'name_item' => 'required|string',
             'type' => 'required|string',
@@ -49,7 +48,6 @@ class GemInformationController extends Controller
         $info = GemInformation::findOrFail($id);
 
         $validated = $request->validate([
-            'game_information_id' => 'required|exists:game_informations,id',
             'image' => 'nullable|file|image|mimes:jpg,jpeg,png|max:2048', 
             'name_item' => 'required|string',
             'type' => 'required|string',

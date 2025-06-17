@@ -34,9 +34,7 @@ class RetailDonationController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'donation_informations_id' => 'required|exists:donation_informations,id',
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'donation_title' => 'required|string|max:255',
             'pricing' => 'required|string',
         ]);
 
@@ -49,9 +47,7 @@ class RetailDonationController extends Controller
         $retailDonation = RetailDonation::findOrFail($id); 
 
         $validated = $request->validate([
-            'donation_informations_id' => 'required|exists:donation_informations,id',
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'donation_title' => 'required|string|max:255',
             'pricing' => 'required|string',
         ]);
 

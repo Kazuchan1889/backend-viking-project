@@ -4,59 +4,56 @@ namespace App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformatio
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\GameInfo\ServerInfo\DropList\DropList;
-use App\Models\GameInfo\MapInformation;
+use App\Models\GameInfo\ServerInfo\DropList\DropList; 
+use App\Models\GameInfo\Items;
 
 class DropListController extends Controller
 {
-    // Ambil semua NPC
+    // Ambil semua Drop List
     public function index()
     {
-        $npcLists = DropList::with('mapInformation')->get();
-        return response()->json($npcLists);
+        $dropLists = DropList::with(['mapInformation', 'item'])->get(); 
+        return response()->json($dropLists);
     }
 
-    // Simpan NPC baru
+    // Simpan Drop List baru
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'droplist' => 'required|string',
-            'buy_with' => 'required|string',
-            'map_information_id' => 'required|exists:map_informations,id',
+            'monster' => 'required|string',
+            'items_id' => 'required|exists:items,id', 
+            'map_information_id' => 'required|exists:map_informations,id', 
         ]);
 
-        $npc = DropList::create($validated);
-        return response()->json($npc, 201);
+        $dropList = DropList::create($validated);
+        return response()->json($dropList, 201);
     }
 
-    // Tampilkan detail NPC tertentu
     public function show($id)
     {
-        $npc = DropList::with('mapInformation')->findOrFail($id);
-        return response()->json($npc);
+        $dropList = DropList::with(['mapInformation', 'item'])->findOrFail($id); // Eager load relationships
+        return response()->json($dropList);
     }
 
-    // Update NPC
     public function update(Request $request, $id)
     {
-        $npc = DropList::findOrFail($id);
+        $dropList = DropList::findOrFail($id);
 
         $validated = $request->validate([
-            'droplist' => 'sometimes|required|string',
-            'buy_with' => 'sometimes|required|string',
+            'monster' => 'sometimes|required|string', 
+            'items_id' => 'sometimes|required|exists:items,id',
             'map_information_id' => 'sometimes|required|exists:map_informations,id',
         ]);
 
-        $npc->update($validated);
-        return response()->json($npc);
+        $dropList->update($validated);
+        return response()->json($dropList);
     }
 
-    // Hapus NPC
     public function destroy($id)
     {
-        $npc = DropList::findOrFail($id);
-        $npc->delete();
+        $dropList = DropList::findOrFail($id);
+        $dropList->delete();
 
-        return response()->json(['message' => 'NPC deleted successfully.']);
+        return response()->json(['message' => 'Drop list deleted successfully.']);
     }
 }

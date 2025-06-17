@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ItemsController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -9,7 +10,6 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\NewsController;
 
 use App\Http\Controllers\Api\GameInfo\MapInformationController;
-use App\Http\Controllers\Api\GameInfo\GameInformationController;
 use App\Http\Controllers\Api\GameInfo\ServerRulesController;
 
 use App\Http\Controllers\Api\GameInfo\ServerInformation\FeatureInformation\PendantInformationController;
@@ -24,16 +24,18 @@ use App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation\Drop
 use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestAfterWarController;
 use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestController;
 
-
-use App\Http\Controllers\Api\Donation\DonationInformationController;
 use App\Http\Controllers\Api\Donation\RetailDonationController;
 use App\Http\Controllers\Api\Donation\SeassonPassDonationController; 
-use App\Http\Controllers\Api\Donation\PackageDonationController;
 use App\Http\Controllers\Api\Donation\HowToDonationController;
 
 use App\Http\Controllers\Api\Donation\ServiceDonation\ServiceDonationController;
 use App\Http\Controllers\Api\Donation\ServiceDonation\TabResourcesController;
 use App\Http\Controllers\Api\Donation\ServiceDonation\TabGemstoneController;
+
+use App\Http\Controllers\Api\PackageCategoryController;
+use App\Http\Controllers\Api\PackagesController;
+use App\Http\Controllers\Api\PackageBonusController;
+use App\Http\Controllers\Api\ItemPackageBonusController;
 
 
 // =======================
@@ -42,9 +44,8 @@ use App\Http\Controllers\Api\Donation\ServiceDonation\TabGemstoneController;
 // =======================
 Route::prefix('game-info')->name('game-info.')->group(function () {
 
-    Route::apiResource('game-data', GameInformationController::class);
     Route::apiResource('server-rules', ServerRulesController::class);
-
+    Route::apiResource('items', ItemsController::class);
     // Map Info Routes
     Route::apiResource('mapinfo', MapInformationController::class)->except(['create', 'edit']);
     Route::get('mapinfo/by-number/{mapNumber}', [MapInformationController::class, 'getMapDataByNumber'])->name('mapinfo.by-number');
@@ -79,7 +80,6 @@ Route::prefix('game-info')->name('game-info.')->group(function () {
 // Moved outside game-info prefix
 // =======================
 Route::prefix('donation')->name('donation.')->group(function () {
-    Route::apiResource('donation-info', DonationInformationController::class);
 
     Route::prefix('service')->name('service.')->group(function () {
         Route::apiResource('gemstone', TabGemstoneController::class);
@@ -90,7 +90,10 @@ Route::prefix('donation')->name('donation.')->group(function () {
     $otherDonationTypes = [
         'retail' => RetailDonationController::class,
         'seassonpass' => SeassonPassDonationController::class,
-        'package' => PackageDonationController::class,
+        'package-bonuses' => PackageBonusController::class,
+        'package-categories' => PackageCategoryController::class,
+        'item-package' => ItemPackageBonusController::class,
+        'packages' => PackagesController::class,
         'howto' => HowToDonationController::class,
     ];
 

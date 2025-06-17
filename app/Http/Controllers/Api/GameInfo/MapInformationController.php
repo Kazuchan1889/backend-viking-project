@@ -27,7 +27,6 @@ class MapInformationController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'game_information_id' => 'required|integer|exists:game_informations,id',
             'map_name' => 'required|string|max:255',
             'image' => 'nullable|file|image|mimes:jpg,jpeg,png,gif,svg', 
         ]);
@@ -49,7 +48,6 @@ class MapInformationController extends Controller
         $info = MapInformation::findOrFail($id);
 
         $validated = $request->validate([
-            'game_information_id' => 'required|integer|exists:game_informations,id', // Tambahkan 'integer'
             'map_name' => 'required|string|max:255', 
             'image' => 'nullable|file|image|mimes:jpg,jpeg,png,gif,svg', // Ubah ke 'nullable' karena tidak selalu ada file baru
         ]);

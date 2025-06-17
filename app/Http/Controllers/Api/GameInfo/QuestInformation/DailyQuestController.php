@@ -27,7 +27,6 @@ class DailyQuestController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'game_information_id' => 'required|exists:game_informations,id',
             'day' => 'required|string',
             'image' => 'nullable|file|image|mimes:jpg,jpeg,png|max:2048',
             'tutorial' => 'required|string',
@@ -51,7 +50,6 @@ class DailyQuestController extends Controller
         $info = DailyQuest::findOrFail($id);
 
         $validated = $request->validate([
-            'game_information_id' => 'required|exists:game_informations,id',
             'day' => 'required|string', 
             'image' => 'nullable|file|image|mimes:jpg,jpeg,png|max:2048',
             'tutorial' => 'required|string',

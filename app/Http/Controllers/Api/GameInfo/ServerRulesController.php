@@ -26,8 +26,8 @@ class ServerRulesController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'game_information_id' => 'required|exists:game_informations,id',
-            'title' => 'required|string|max:255',     // lowercase key untuk konsistensi
+            'rules' => 'required|string|max:255',    
+            'category' => 'required|string',
             'description' => 'required|string',
         ]);
 
@@ -40,8 +40,8 @@ class ServerRulesController extends Controller
         $server = ServerRules::findOrFail($id);
 
         $validated = $request->validate([
-            'game_information_id' => 'required|exists:game_informations,id',
-            'title' => 'required|string|max:255',
+            'rules' => 'required|string|max:255',
+            'category' => 'required|string',
             'description' => 'required|string',
         ]);
 

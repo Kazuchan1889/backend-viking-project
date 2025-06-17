@@ -4,7 +4,6 @@ namespace App\Models\GameInfo\ServerInfo\GeneralInfo\FeaturesInfo;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\GameInfo\GameInformation; 
 
 class FeaturesEnable extends Model
 {
@@ -12,13 +11,7 @@ class FeaturesEnable extends Model
 
 
     protected $fillable = [
-        'game_information_id',
-        'title',
+        'feature',
         'description',
     ];
-
-    public function gameInformation() 
-    {
-        return $this->belongsTo(GameInformation::class, 'game_information_id', 'id');
-    }
 }

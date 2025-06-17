@@ -10,19 +10,16 @@ class NpcList extends Model
 {
     use HasFactory;
 
-    protected $table = 'npclist'; 
+    protected $table = 'npclist';
 
     protected $fillable = [
-        'npc',           
-        'buy_with',  
-        'map_information_id',         
+        'npc',
+        'buy_with',
+        'map_information_id',
     ];
 
-    /**
-     * Relasi ke MapInformation (many-to-one)
-     */
     public function mapInformation()
     {
-        return $this->belongsTo(MapInformation::class, 'map_information_id', 'id');
+        return $this->belongsTo(MapInformation::class, 'map_information_id');
     }
 }

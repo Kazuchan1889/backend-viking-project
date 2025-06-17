@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Donation\ServiceDonation;
 use App\Http\Controllers\Controller;
 use App\Models\Donation\ServiceDonation\TabResources;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse; // Penting: Import ini untuk type hinting
+use Illuminate\Http\JsonResponse; 
 
 class TabResourcesController extends Controller
 {
@@ -14,7 +14,6 @@ class TabResourcesController extends Controller
      */
     public function index(): JsonResponse
     {
-        // Ubah $droplists menjadi $retailDonations untuk konsistensi dengan nama model
         $serviceDonations = TabResources::all();
         return response()->json($serviceDonations);
     }
@@ -24,8 +23,7 @@ class TabResourcesController extends Controller
      */
     public function show($id): JsonResponse
     {
-        // Gunakan findOrFail() untuk penanganan 404 yang lebih ringkas.
-        // Laravel secara otomatis akan mengembalikan 404 jika ID tidak ditemukan.
+        
         $serviceDonations = TabResources::findOrFail($id);
         return response()->json($serviceDonations);
     }
@@ -36,13 +34,10 @@ class TabResourcesController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'donation_informations_id' => 'required|exists:donation_informations,id',
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'donation_title' => 'required|string|max:255',
             'pricing' => 'required|string',
         ]);
 
-        // Ubah $droplist menjadi $retailDonation untuk konsistensi
         $serviceDonations = TabResources::create($validated);
         return response()->json($serviceDonations, 201); // Mengembalikan status 201 Created
     }
@@ -55,9 +50,7 @@ class TabResourcesController extends Controller
         $serviceDonations = TabResources::findOrFail($id); // Gunakan findOrFail()
 
         $validated = $request->validate([
-            'donation_informations_id' => 'required|exists:donation_informations,id',
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'donation_title' => 'required|string|max:255',
             'pricing' => 'required|string',
         ]);
 
@@ -70,7 +63,7 @@ class TabResourcesController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $serviceDonations = TabResources::findOrFail($id); // Gunakan findOrFail()
+        $serviceDonations = TabResources::findOrFail($id); 
         $serviceDonations->delete();
 
         return response()->json(['message' => 'Deleted successfully']);

@@ -25,9 +25,7 @@ class ServiceDonationController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'donation_informations_id' => 'required|exists:donation_informations,id',
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'donation_title' => 'required|string|max:255',
             'pricing' => 'required|string',
         ]);
 
@@ -41,9 +39,7 @@ class ServiceDonationController extends Controller
         $serviceDonations = ServiceDonation::findOrFail($id); // Gunakan findOrFail()
 
         $validated = $request->validate([
-            'donation_informations_id' => 'required|exists:donation_informations,id',
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'donation_title' => 'required|string|max:255',
             'pricing' => 'required|string',
         ]);
 

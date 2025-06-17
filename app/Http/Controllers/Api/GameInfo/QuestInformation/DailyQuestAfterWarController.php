@@ -28,7 +28,6 @@ class DailyQuestAfterWarController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'game_information_id' => 'required|exists:game_informations,id',
             'category' => 'required|string',
             'image' => 'required|file|image|mimes:jpg,jpeg,png|max:2048',
             'daily_quest' => 'required|string',
@@ -46,7 +45,6 @@ class DailyQuestAfterWarController extends Controller
         $info = DailyQuestAfterWar::findOrFail($id);
 
         $validated = $request->validate([
-            'game_information_id' => 'required|exists:game_informations,id',
             'category' => 'required|string',
             'image' => 'required|file|image|mimes:jpg,jpeg,png|max:2048',
             'daily_quest' => 'required|string',

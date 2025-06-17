@@ -4,7 +4,6 @@ namespace App\Models\GameInfo\QuestInfo;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory; 
-use App\Models\GameInfo\GameInformation; 
 
 class DailyQuestAfterWar extends Model
 {
@@ -22,7 +21,6 @@ class DailyQuestAfterWar extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'game_information_id', 
         'category',
         'image',
         'daily_quest',
@@ -30,20 +28,4 @@ class DailyQuestAfterWar extends Model
         'quest',
         'reward',
     ];
-
-    /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    public $timestamps = true;
-
-    /**
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function gameInformation() // <-- Relasi ke GameInformation
-    {
-        return $this->belongsTo(GameInformation::class, 'game_information_id', 'id');
-    }
 }
