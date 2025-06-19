@@ -25,7 +25,7 @@ use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestAfterWarControl
 use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestController;
 
 use App\Http\Controllers\Api\Donation\RetailDonationController;
-use App\Http\Controllers\Api\Donation\SeassonPassDonationController; 
+use App\Http\Controllers\Api\Donation\SeassonPassDonationController;
 use App\Http\Controllers\Api\Donation\HowToDonationController;
 
 use App\Http\Controllers\Api\Donation\ServiceDonation\ServiceDonationController;
@@ -106,21 +106,26 @@ Route::prefix('donation')->name('donation.')->group(function () {
 // News Routes
 // =======================
 Route::apiResource('news', NewsController::class)->except(['create', 'edit']); // Using apiResource for consistency
-
+// Routes for News
+Route::get('news', [NewsController::class, 'index']);
+Route::get('news/{id}', [NewsController::class, 'show']);
+Route::post('news', [NewsController::class, 'store']);
+Route::put('news/{id}', [NewsController::class, 'update']);
+Route::delete('news/{id}', [NewsController::class, 'destroy']);
 
 // =======================
 // Authenticated routes
 // =======================
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/user', fn (Request $request) => $request->user());
+    Route::get('/user', fn(Request $request) => $request->user());
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']); // Use POST for logout
-    Route::get('/me', fn (Request $request) => response()->json([
+    Route::get('/me', fn(Request $request) => response()->json([
         'user' => $request->user(),
         'role' => $request->user()->getRoleNames()->first()
     ]));
 
     // This route seems specific for an admin session check, keep if needed.
-    Route::post('/admin/session', fn () => response()->json(['status' => 'admin logged in']));
+    Route::post('/admin/session', fn() => response()->json(['status' => 'admin logged in']));
 });
 
 // =======================
@@ -131,4 +136,4 @@ Route::post('/forgot-password', [PasswordResetLinkController::class, 'store']);
 Route::post('/reset-password', [NewPasswordController::class, 'store']);
 
 // Optional additional auth routes
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
