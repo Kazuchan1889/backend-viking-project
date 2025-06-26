@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\GameInfo\ServerInformation\NPCListInformation
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\GameInfo\ServerInfo\NPCList\NpcList;
+use App\Models\GameInfo\ServerInfo\NPCList\NPCList;
 use App\Models\GameInfo\MapInformation;
 
 class NPCListController extends Controller
