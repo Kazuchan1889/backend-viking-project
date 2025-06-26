@@ -18,7 +18,7 @@ use App\Http\Controllers\Api\GameInfo\ServerInformation\GeneralInformation\Syste
 use App\Http\Controllers\Api\GameInfo\ServerInformation\GeneralInformation\ServersInformationController;
 use App\Http\Controllers\Api\GameInfo\ServerInformation\GeneralInformation\FeaturesInformation\FeaturesDisableController;
 use App\Http\Controllers\Api\GameInfo\ServerInformation\GeneralInformation\FeaturesInformation\FeaturesEnableController;
-use App\Http\Controllers\Api\GameInfo\ServerInformation\NPCListInformation\NpcListController;
+use App\Http\Controllers\Api\GameInfo\ServerInformation\NPCListInformation\NPCListController;
 use App\Http\Controllers\Api\GameInfo\ServerInformation\DropListInformation\DropListController;
 
 use App\Http\Controllers\Api\GameInfo\QuestInformation\DailyQuestAfterWarController;
