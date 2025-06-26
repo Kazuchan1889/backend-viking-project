@@ -58,7 +58,7 @@ Route::prefix('game-info')->name('game-info.')->group(function () {
         Route::apiResource('systeminfo', SystemInformationController::class);
         Route::apiResource('feature-disable', FeaturesDisableController::class);
         Route::apiResource('feature-enable', FeaturesEnableController::class);
-        Route::apiResource('npclist', NpcListController::class);
+        Route::apiResource('npclist', NPCListController::class);
         Route::apiResource('droplist', DropListController::class);
     });
 

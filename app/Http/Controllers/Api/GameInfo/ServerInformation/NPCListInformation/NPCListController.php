@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\GameInfo\ServerInfo\NPCList\NpcList;
 use App\Models\GameInfo\MapInformation;
 
-class NpcListController extends Controller
+class NPCListController extends Controller
 {
     // Ambil semua NPC
     public function index()
