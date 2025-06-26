@@ -30,7 +30,7 @@ class SystemInformationController extends Controller
         $feature = SystemInformation::findOrFail($id);
 
         $validated = $request->validate([
-            'server_info' => 'required|string',
+            'system_info' => 'required|string',
             'description' => 'required|string',
         ]);
 
