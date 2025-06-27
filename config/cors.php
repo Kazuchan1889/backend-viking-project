@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [env('FRONTEND_URL', 'https://vikingsf.vercel.app/')],
+    'allowed_origins' => [env('FRONTEND_URL', 'https://vikingsf.vercel.app')],
 
     'allowed_origins_patterns' => [],
 
