@@ -2,11 +2,6 @@
 
 use App\Http\Controllers\Api\ItemsController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\NewsController;
 
 use App\Http\Controllers\Api\GameInfo\MapInformationController;
@@ -112,28 +107,3 @@ Route::get('news/{id}', [NewsController::class, 'show']);
 Route::post('news', [NewsController::class, 'store']);
 Route::put('news/{id}', [NewsController::class, 'update']);
 Route::delete('news/{id}', [NewsController::class, 'destroy']);
-
-// =======================
-// Authenticated routes
-// =======================
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/user', fn(Request $request) => $request->user());
-    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']); // Use POST for logout
-    Route::get('/me', fn(Request $request) => response()->json([
-        'user' => $request->user(),
-        'role' => $request->user()->getRoleNames()->first()
-    ]));
-
-    // This route seems specific for an admin session check, keep if needed.
-    Route::post('/admin/session', fn() => response()->json(['status' => 'admin logged in']));
-});
-
-// =======================
-// Public Auth routes
-// =======================
-Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-Route::post('/forgot-password', [PasswordResetLinkController::class, 'store']);
-Route::post('/reset-password', [NewPasswordController::class, 'store']);
-
-// Optional additional auth routes
-require __DIR__ . '/auth.php';
