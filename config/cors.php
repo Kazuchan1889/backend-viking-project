@@ -15,13 +15,13 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'login', 'logout', 'sanctum/csrf-cookie'],
+    'paths' => ['api/*', 'login', 'logout', 'sanctum/csrf-cookie', 'me', 'admin/session'],
 
     'allowed_methods' => ['*'],
 
     'allowed_origins' => ['https://vikingsf.vercel.app'],
 
-    'allowed_origins_patterns' => ['/^https:\/\/.*\.vercel\.app$/'],
+    'allowed_origins_patterns' => [],
 
     'allowed_headers' => ['*'],
 
