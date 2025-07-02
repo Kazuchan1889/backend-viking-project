@@ -1,9 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -28,33 +26,7 @@ Route::middleware(['web'])->group(function () {
     });
 
     Route::post('/admin/session', fn() => response()->json(['status' => 'admin logged in']));
-
-    // ✅ Override: pastikan XSRF-TOKEN dikirim dengan benar ke frontend (Vercel)
-    Route::get('/sanctum/csrf-cookie', function () {
-        return response()->json(['message' => 'CSRF cookie set manually'])
-            ->withCookie(
-                cookie(
-                    'XSRF-TOKEN',
-                    csrf_token(),
-                    120, // Menit
-                    '/', // path
-                    '.vercel.app', // domain
-                    true, // secure
-                    false, // httpOnly (false agar bisa diakses JS)
-                    false, // raw
-                    'None' // SameSite
-                )
-            );
-    });
-
-    // ✅ Debug endpoint: lihat apakah Laravel bisa set cookie dengan benar
-    Route::get('/check-cookie', function () {
-        return response()->json([
-            'xsrf' => Cookie::get('XSRF-TOKEN'),
-            'session' => Cookie::get(config('session.cookie', Str::slug(env('APP_NAME', 'laravel'), '_').'_session'))
-        ]);
-    });
 });
 
-// Route tambahan bawaan Breeze (jika ada)
+// Masih boleh kalau ada route bawaan breeze
 require __DIR__.'/auth.php';
