@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://vikingsf.vercel.app'],
+    'allowed_origins' => ['https://vikingsf-production.up.railway.app'],
 
     'allowed_origins_patterns' => [],
 
