@@ -14,9 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->api(prepend: [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            \App\Http\Middleware\VerifyCsrfToken::class,
         ]);
 
         $middleware->alias([
+            'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
         ]);
 
