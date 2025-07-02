@@ -3,58 +3,67 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Handle an incoming authentication request.
+     * Handle an API authentication request (Bearer token, not session).
      */
-    public function store(LoginRequest $request): JsonResponse
+    public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
-            $request->authenticate();
+            $request->validate([
+                'username' => 'required|string',
+                'password' => 'required|string',
+            ]);
+
+            // Attempt login using provided credentials
+            if (!Auth::attempt($request->only('username', 'password'))) {
+                return response()->json([
+                    'message' => 'Invalid credentials',
+                ], Response::HTTP_UNAUTHORIZED); // 401
+            }
 
             $user = Auth::user();
 
             if (!$user) {
                 return response()->json([
-                    'message' => 'Authentication failed. User not found.'
-                ], Response::HTTP_UNAUTHORIZED); // 401
+                    'message' => 'Authentication failed. User not found.',
+                ], Response::HTTP_UNAUTHORIZED);
             }
 
+            // Create personal access token using Laravel Sanctum
             $token = $user->createToken('api-token')->plainTextToken;
 
             return response()->json([
                 'user' => $user,
                 'token' => $token,
-            ], Response::HTTP_OK); // 200 OK
+            ], Response::HTTP_OK);
 
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation failed',
                 'errors' => $e->errors(),
-            ], Response::HTTP_UNPROCESSABLE_ENTITY); // 422
-
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         } catch (Throwable $e) {
             Log::error('Login error: ' . $e->getMessage());
 
             return response()->json([
-                'message' => 'Internal server error'
-            ], Response::HTTP_INTERNAL_SERVER_ERROR); // 500
+                'message' => 'Internal server error',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
     /**
-     * Destroy an authenticated session.
+     * Logout and revoke token (Bearer token version).
      */
-    public function destroy(Request $request): JsonResponse
+    public function destroy(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
             $user = $request->user();
@@ -62,21 +71,21 @@ class AuthenticatedSessionController extends Controller
             if (!$user) {
                 return response()->json([
                     'message' => 'Unauthenticated'
-                ], Response::HTTP_UNAUTHORIZED); // 401
+                ], Response::HTTP_UNAUTHORIZED);
             }
 
             $user->currentAccessToken()->delete();
 
             return response()->json([
-                'message' => 'Logged out successfully'
-            ], Response::HTTP_OK); // 200 OK
+                'message' => 'Logged out successfully',
+            ], Response::HTTP_OK);
 
         } catch (Throwable $e) {
             Log::error('Logout error: ' . $e->getMessage());
 
             return response()->json([
                 'message' => 'Internal server error during logout'
-            ], Response::HTTP_INTERNAL_SERVER_ERROR); // 500
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
