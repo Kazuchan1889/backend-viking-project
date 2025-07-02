@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://vikingsf-production.up.railway.app', 'http://31.97.66.224:8000'],
+    'allowed_origins' => ['http://31.97.66.224:8000'],
 
     'allowed_origins_patterns' => [],
 
