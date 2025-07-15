@@ -30,7 +30,7 @@ class NewsController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image' => 'required|image|max:2048', // validasi file gambar max 2MB
+            'image' => 'required|image|max:30720', // validasi file gambar max 2MB
         ]);
 
         // Simpan file gambar ke folder public storage
